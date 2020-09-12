@@ -140,6 +140,14 @@ export default class Home extends Vue {
   }
 
   castSpell(spell: Spell) {
+    const infos: InfoPopup[] = [
+      { text: "Not Enough Mana!", colorHex: "blue", xOffset: 0 }
+    ];
+    if (this.user.mana < spell.manaCost) {
+      this.addInfoPopups(infos);
+      return;
+    }
+
     if (
       this.monster !== null &&
       !this.user.reloadingSpells.includes(spell.key)
