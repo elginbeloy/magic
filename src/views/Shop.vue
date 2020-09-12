@@ -75,6 +75,10 @@
         }}
         <img src="../assets/images/fight.png" />
       </div>
+      <div v-if="!selectedIsSpell" class="sell-button" @click="sellItem">
+        Sell for {{ selected.sellValue }}
+        <img src="../assets/images/shop.png" />
+      </div>
     </div>
   </div>
 </template>
@@ -117,6 +121,14 @@ export default class Shop extends Vue {
     if (this.selected && this.selectedIsSpell) {
       this.$store.dispatch("buySpell", this.selected);
     }
+  }
+
+  sellItem() {
+    if (this.selected && !this.selectedIsSpell) {
+      this.$store.commit("sellItem", this.selected);
+    }
+
+    this.selected = this.user.equippedSpells[0];
   }
 
   equip() {
@@ -298,7 +310,8 @@ export default class Shop extends Vue {
   }
 }
 
-.buy-button {
+.buy-button,
+.sell-button {
   position: absolute;
   bottom: 0px;
   right: 0px;
@@ -327,5 +340,9 @@ export default class Shop extends Vue {
     filter: drop-shadow(0 0 4px $primary-blue);
     transform: scale(1.1);
   }
+}
+
+.sell-button {
+  right: 150px;
 }
 </style>

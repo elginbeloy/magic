@@ -134,10 +134,19 @@ export default new Vuex.Store({
       }
     },
     unequipSpellByKey(state, spellKey: string) {
-      delete state.user.equippedSpells[spellKey];
+      const equippedSpells = { ...state.user.equippedSpells };
+      delete equippedSpells[spellKey];
+      Vue.set(state.user, "equippedSpells", equippedSpells);
     },
     addItem(state, item: Item) {
-      state.user.items.push(item);
+      Vue.set(state.user, "items", [...state.user.items, item]);
+    },
+    sellItem(state, item: Item) {
+      const items = state.user.items.filter(
+        (currentItem: Item) => currentItem.key !== item.key
+      );
+      Vue.set(state.user, "items", items);
+      Vue.set(state.user, "gold", item.sellValue);
     },
     removeItemByName(state, name: string) {
       Vue.set(
