@@ -431,8 +431,7 @@ lifeLeach2.effect = (
 const lifeLeach3 = new Spell({
   key: "lifeLeach3",
   name: "Life Leach III",
-  desc:
-    "Instantly kill your enemy, taking their remaining life points for yourself.",
+  desc: "Instantly take half your enemies remaining life points for yourself.",
   reloadTimeSeconds: 60.0,
   manaCost: 30.0,
   imagePath: require("@/assets/images/spells/life_leach_3.png"),
@@ -451,7 +450,7 @@ lifeLeach3.effect = (
   ];
 
   if (user.mana >= lifeLeach3.manaCost) {
-    const damage = monster.health;
+    const damage = Math.round(monster.health / 2);
 
     store.commit("addMana", -lifeLeach3.manaCost);
     store.dispatch("attackMonster", damage);
@@ -627,11 +626,11 @@ goldGain2.effect = (
 const goldGain3 = new Spell({
   key: "goldGain3",
   name: "Dead Man's Gold",
-  desc: "Kill your enemy, taking 50X their remaining health points in gold.",
-  reloadTimeSeconds: 40.0,
-  manaCost: 25.0,
+  desc: "Instantly take 50 X half of your enemies HP in gold.",
+  reloadTimeSeconds: 30.0,
+  manaCost: 20.0,
   imagePath: require("@/assets/images/spells/gold_gain_3.png"),
-  cost: 5000
+  cost: 2500
 });
 
 goldGain3.effect = (
@@ -646,7 +645,7 @@ goldGain3.effect = (
   ];
 
   if (user.mana >= goldGain3.manaCost) {
-    const damage = monster.health;
+    const damage = Math.round(monster.health / 2);
 
     store.dispatch("attackMonster", damage);
     store.commit("addMana", -goldGain3.manaCost);
