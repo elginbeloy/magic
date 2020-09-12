@@ -198,8 +198,8 @@ export default new Vuex.Store({
         );
 
         context.commit("setLastItemReward", undefined); // Reset item reward.
-        const itemRoll = Math.random();
         for (const item of context.state.user.map.items) {
+          const itemRoll = Math.random();
           if (itemRoll <= item.probability) {
             context.commit("addItem", item.item);
             context.commit("setLastItemReward", item.item);
