@@ -61,7 +61,7 @@
       <a v-if="selectedIsSpell"> Mana Cost: {{ selected.manaCost }} </a>
       <div
         class="buy-button"
-        v-if="selectedIsSpell && !userHasSpell()"
+        v-if="selectedIsSpell && !userHasSpell(selected.key)"
         @click="buySpell"
       >
         {{ selected.cost }} <img src="../assets/images/shop.png" />
@@ -102,6 +102,7 @@ export default class Shop extends Vue {
 
   select(selected: Spell | Item) {
     this.selected = selected;
+    console.log(this.userHasSpell(selected.key));
   }
 
   get selectedIsSpell(): boolean {

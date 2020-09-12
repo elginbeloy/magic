@@ -116,7 +116,10 @@ export default new Vuex.Store({
       }
     },
     addSpell(state, spell: Spell) {
-      state.user.spells[spell.key] = spell;
+      Vue.set(state.user, "spells", {
+        ...state.user.spells,
+        [spell.key]: spell
+      });
     },
     equipSpellByKey(state, spellKey: string) {
       const spell = state.user.spells[spellKey];
@@ -124,7 +127,10 @@ export default new Vuex.Store({
         spell &&
         Object.keys(state.user.equippedSpells).length < state.user.maxSpells
       ) {
-        state.user.equippedSpells[spellKey] = spell;
+        Vue.set(state.user, "equippedSpells", {
+          ...state.user.equippedSpells,
+          [spellKey]: spell
+        });
       }
     },
     unequipSpellByKey(state, spellKey: string) {
@@ -214,7 +220,10 @@ export default new Vuex.Store({
       }
     },
     buySpell(context, spell: Spell) {
-      if (context.state.user.gold >= spell.cost) {
+      if (
+        context.state.user.gold >= spell.cost &&
+        !context.state.user.spells[spell.key]
+      ) {
         context.commit("addGold", -spell.cost);
         context.commit("addSpell", spell);
       }
