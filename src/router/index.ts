@@ -9,6 +9,16 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Home",
     component: Home
+  },
+  {
+    path: "/shop",
+    name: "Shop",
+    component: () => import("@/views/Shop.vue")
+  },
+  {
+    path: "/map",
+    name: "Map",
+    component: () => import("@/views/Map.vue")
   }
 ];
 
@@ -16,6 +26,15 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes
+});
+
+router.afterEach(transition => {
+  setTimeout(() => {
+    const elm = document?.getElementById("app-content");
+    if (elm) {
+      elm.focus();
+    }
+  }, 1000);
 });
 
 export default router;
