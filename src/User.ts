@@ -88,12 +88,12 @@ export const BASE_USER: User = {
   luck: 5,
   health: 20,
   mana: 5,
-  gold: 500,
+  gold: 0,
   spells: { ...DEFAULT_SPELLS },
   equippedSpells: { ...DEFAULT_SPELLS },
   maxSpells: 5,
   reloadingSpells: [],
   reloadRemovalTimeouts: [],
-  items: [WIZARD_HAT, BASIC_STAFF, BASIC_WAND],
+  items: [],
   equippedItems: {}
 };
