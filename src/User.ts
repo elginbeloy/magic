@@ -84,7 +84,7 @@ export const BASE_USER: User = {
   MP: 5,
   inventorySize: 5,
   magicIQ: 5,
-  magicStrength: 500,
+  magicStrength: 5,
   luck: 5,
   health: 20,
   mana: 5,

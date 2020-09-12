@@ -511,11 +511,11 @@ brainExpander.effect = (
 const deathSpell = new Spell({
   key: "deathSpell",
   name: "Death Spell",
-  desc: "Kill any enemy with a single spell. Not too slow reload either.",
+  desc: "Decay half of any enemies life with a single spell.",
   reloadTimeSeconds: 10.0,
-  manaCost: 10.0,
+  manaCost: 5.0,
   imagePath: require("@/assets/images/spells/death_spell.png"),
-  cost: 1000
+  cost: 500
 });
 
 deathSpell.effect = (
@@ -530,7 +530,7 @@ deathSpell.effect = (
   ];
 
   if (user.mana >= deathSpell.manaCost) {
-    const damage = monster.health;
+    const damage = Math.round(monster.health / 2);
 
     store.commit("addMana", -deathSpell.manaCost);
     store.dispatch("attackMonster", damage);
