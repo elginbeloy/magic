@@ -37,6 +37,7 @@ export interface LocationMap {
   monsters: { monster: MonsterType; probability: number }[];
   items: { item: Item; probability: number }[];
   imagePath: string;
+  magicIQRequired: number;
 }
 
 export const MAPS: LocationMap[] = [
@@ -57,7 +58,8 @@ export const MAPS: LocationMap[] = [
       { item: FIRE_EYE_STAFF, probability: 0.02 },
       { item: MAGIC_STAFF, probability: 0.01 }
     ],
-    imagePath: require("@/assets/images/mystical_forest.jpg")
+    imagePath: require("@/assets/images/mystical_forest.jpg"),
+    magicIQRequired: 0
   },
   {
     name: "Mountain Passage",
@@ -79,7 +81,8 @@ export const MAPS: LocationMap[] = [
       { item: MINOTAURS_MIGHT, probability: 0.03 },
       { item: STAFF_OF_MANA, probability: 0.02 }
     ],
-    imagePath: require("@/assets/images/mountain_passage.jpg")
+    imagePath: require("@/assets/images/mountain_passage.jpg"),
+    magicIQRequired: 10
   },
   {
     name: "Ocean Passage",
@@ -97,7 +100,8 @@ export const MAPS: LocationMap[] = [
       { item: WAND_OF_WEALTH, probability: 0.03 },
       { item: STAFF_OF_WEALTH, probability: 0.01 }
     ],
-    imagePath: require("@/assets/images/ocean_passage.png")
+    imagePath: require("@/assets/images/ocean_passage.png"),
+    magicIQRequired: 20
   },
   {
     name: "Village",
@@ -122,7 +126,8 @@ export const MAPS: LocationMap[] = [
       { item: STAFF_OF_HEALTH, probability: 0.01 },
       { item: WAND_OF_MAGIC, probability: 0.01 }
     ],
-    imagePath: require("@/assets/images/village.png")
+    imagePath: require("@/assets/images/village.png"),
+    magicIQRequired: 35
   },
   {
     name: "Frozen Passage",
@@ -141,7 +146,8 @@ export const MAPS: LocationMap[] = [
       { item: STAFF_OF_HEALTH, probability: 0.01 },
       { item: WAND_OF_MAGIC, probability: 0.01 }
     ],
-    imagePath: require("@/assets/images/frozen_passage.png")
+    imagePath: require("@/assets/images/frozen_passage.png"),
+    magicIQRequired: 50
   },
   {
     name: "Cloud City",
@@ -160,7 +166,8 @@ export const MAPS: LocationMap[] = [
       { item: STAFF_OF_HEALTH, probability: 0.01 },
       { item: WAND_OF_MAGIC, probability: 0.01 }
     ],
-    imagePath: require("@/assets/images/cloud_city.jpg")
+    imagePath: require("@/assets/images/cloud_city.jpg"),
+    magicIQRequired: 75
   },
   {
     name: "Jungle Passage",
@@ -179,6 +186,24 @@ export const MAPS: LocationMap[] = [
       { item: STAFF_OF_HEALTH, probability: 0.01 },
       { item: WAND_OF_MAGIC, probability: 0.01 }
     ],
-    imagePath: require("@/assets/images/jungle_passage.jpg")
+    imagePath: require("@/assets/images/jungle_passage.jpg"),
+    magicIQRequired: 100
+  },
+  {
+    name: "Hallow's Passage",
+    monsters: [
+      { monster: NECROMANCER, probability: 0.4 },
+      { monster: SHADOW_MONSTER, probability: 0.3 },
+      { monster: GHOST, probability: 0.15 },
+      { monster: ZOMBIE, probability: 0.15 }
+    ],
+    items: [
+      { item: WAND_OF_WEALTH, probability: 0.1 },
+      { item: STAFF_OF_WEALTH, probability: 0.08 },
+      { item: STAFF_OF_HEALTH, probability: 0.05 },
+      { item: WAND_OF_MAGIC, probability: 0.03 }
+    ],
+    imagePath: require("@/assets/images/hallows_passage.jpg"),
+    magicIQRequired: 150
   }
 ];

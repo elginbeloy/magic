@@ -18,6 +18,13 @@
       >
         <div class="overlay"></div>
         <div class="title">{{ map.name }}</div>
+        <div
+          class="required-container"
+          v-if="map.magicIQRequired > user.magicIQ"
+        >
+          <a class="required-container__title">{{ map.magicIQRequired }}</a>
+          <a class="required-container__subtitle">Magic IQ Required</a>
+        </div>
       </div>
     </div>
     <div class="map-info">
@@ -101,7 +108,9 @@ export default class Map extends Vue {
   MAPS = MAPS;
 
   selectMap(map: LocationMap) {
-    this.$store.commit("setMap", map);
+    if (map.magicIQRequired <= this.user.magicIQ) {
+      this.$store.commit("setMap", map);
+    }
   }
 }
 </script>
@@ -237,9 +246,8 @@ export default class Map extends Vue {
 .map-card {
   position: relative;
   z-index: 1;
-  width: 300px;
-  height: 400px;
-  padding: 20px;
+  width: 275px;
+  height: 350px;
   margin-right: -120px;
   background-size: cover;
   background-position: center;
@@ -249,6 +257,41 @@ export default class Map extends Vue {
   transition: 0.2s ease-out all;
   cursor: pointer;
   overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .required-container {
+    position: relative;
+    opacity: 0;
+    max-width: 100%;
+    max-height: 50%;
+    transition: 0.2s linear all;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    color: #fff;
+    text-transform: uppercase;
+
+    &__title {
+      font-size: 72px;
+      font-weight: 200;
+      letter-spacing: 8px;
+    }
+
+    &__subtitle {
+      font-size: 12px;
+      line-height: 24px;
+    }
+  }
+
+  &:hover .required-container {
+    opacity: 1;
+  }
 
   .overlay {
     position: absolute;
@@ -262,12 +305,16 @@ export default class Map extends Vue {
   }
 
   .title {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 20px;
     z-index: 1;
     font-size: 14px;
+    line-height: 28px;
     color: #fff;
     text-transform: uppercase;
-    letter-spacing: 6px;
+    letter-spacing: 4px;
   }
 
   &:hover {

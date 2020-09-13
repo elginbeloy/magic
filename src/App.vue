@@ -27,7 +27,7 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:200,400,500,600,700&display=swap");
 @import url("./assets/font/iconfont.css");
 @import "./styles.scss";
 
