@@ -19,6 +19,12 @@
         Map
       </div>
     </router-link>
+    <router-link to="land">
+      <div class="link">
+        <img src="../assets/images/land.png" />
+        Land
+      </div>
+    </router-link>
   </div>
 </template>
 

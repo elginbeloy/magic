@@ -19,6 +19,11 @@ const routes: Array<RouteConfig> = [
     path: "/map",
     name: "Map",
     component: () => import("@/views/Map.vue")
+  },
+  {
+    path: "/land",
+    name: "Land",
+    component: () => import("@/views/Land.vue")
   }
 ];
 
