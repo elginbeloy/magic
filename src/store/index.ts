@@ -42,14 +42,14 @@ export default new Vuex.Store({
       Vue.set(state.user, "map", map);
     },
     clearReloadingSpells(state) {
-      state.user = { ...state.user, reloadingSpells: [] };
+      Vue.set(state.user, "reloadingSpells", []);
     },
     addReloadingSpell(state, spell: string) {
       if (state.monster) {
-        state.user = {
-          ...state.user,
-          reloadingSpells: [...state.user.reloadingSpells, spell]
-        };
+        Vue.set(state.user, "reloadingSpells", [
+          ...state.user.reloadingSpells,
+          spell
+        ]);
       }
     },
     addReloadRemovalTimeout(state, id: number) {
@@ -62,12 +62,11 @@ export default new Vuex.Store({
       Vue.set(state.user, "reloadRemovalTimeouts", []);
     },
     removeReloadingSpell(state, spell: string) {
-      state.user = {
-        ...state.user,
-        reloadingSpells: state.user.reloadingSpells.filter(
-          (s: string) => s !== spell
-        )
-      };
+      Vue.set(
+        state.user,
+        "reloadingSpells",
+        state.user.reloadingSpells.filter((s: string) => s !== spell)
+      );
     },
     setLastGoldReward(state, lastGoldReward: number) {
       Vue.set(state.user, "lastGoldReward", lastGoldReward);
@@ -79,11 +78,27 @@ export default new Vuex.Store({
       Vue.set(state.user, "lastItemReward", item);
     },
     addHealth(state, health: number) {
-      state.user.health = Math.min(state.user.HP, state.user.health + health);
+      Vue.set(
+        state.user,
+        "health",
+        Math.min(state.user.HP, state.user.health + health)
+      );
 
       if (state.user.health <= 0) {
-        state.user = { ...BASE_USER };
+        state.user = { ...BASE_USER, dead: true };
+        // Clear the current attack and effect intervals.
+        clearInterval(state.monster.attackInterval);
+        for (const effectInterval of state.monster.effectIntervals) {
+          clearInterval(effectInterval);
+        }
+        state.monster = null;
       }
+    },
+    confirmDeath(state) {
+      Vue.set(state.user, "dead", false);
+    },
+    confirmLevelUp(state) {
+      Vue.set(state.user, "levelUp", false);
     },
     addMana(state, mana: number) {
       state.user.mana = Math.max(
@@ -95,9 +110,14 @@ export default new Vuex.Store({
       state.user.exp += exp;
 
       if (state.user.exp >= USER_LEVELS[state.user.level - 1]) {
-        state.user.level += 1;
-        state.user.exp = 0;
-        state.user.statPoints += 5;
+        // Cleaner than doing hella vue.sets.
+        state.user = {
+          ...state.user,
+          level: state.user.level + 1,
+          exp: 0,
+          statPoints: state.user.statPoints + 5,
+          levelUp: true
+        };
       }
     },
     addGold(state, gold: number) {
@@ -105,6 +125,13 @@ export default new Vuex.Store({
     },
     addStatPoints(state, amount: number) {
       state.user.statPoints += amount;
+    },
+    addStatAmount(state, payload: { statName: USER_STAT; amount: number }) {
+      Vue.set(
+        state.user,
+        payload.statName,
+        state.user[payload.statName] + payload.amount
+      );
     },
     addStat(state, statName: USER_STAT) {
       if (state.user.statPoints > 0) {

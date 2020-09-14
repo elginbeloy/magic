@@ -4,8 +4,7 @@ export class Item {
   desc: string;
   imagePath: string;
   sellValue: number;
-  equip: (store: any) => void;
-  unequip: (store: any) => void;
+  effects: { statName: string; amount: number }[];
 
   constructor(
     key: string,
@@ -13,16 +12,28 @@ export class Item {
     desc: string,
     imagePath: string,
     sellValue: number,
-    equip: (store: any) => void,
-    unequip: (store: any) => void
+    effects: { statName: string; amount: number }[]
   ) {
     this.key = key;
     this.name = name;
     this.desc = desc;
     this.imagePath = imagePath;
     this.sellValue = sellValue;
-    this.equip = equip;
-    this.unequip = unequip;
+    this.effects = effects;
+  }
+
+  equip(store: any) {
+    for (const effect of this.effects) {
+      console.log(effect);
+      store.commit("addStatAmount", effect);
+    }
+  }
+
+  unequip(store: any) {
+    for (const effect of this.effects) {
+      const undoEffect = { ...effect, amount: -effect.amount };
+      store.commit("addStatAmount", undoEffect);
+    }
   }
 }
 
@@ -32,12 +43,7 @@ export const WIZARD_HAT = new Item(
   "Seems Basic. Adds +1 magicStrength.",
   require("@/assets/images/items/basic_wizard_hat.png"),
   10,
-  (store: any) => {
-    store.commit("addStat", "magicStrength", 1);
-  },
-  (store: any) => {
-    store.commit("addStat", "magicStrength", -1);
-  }
+  [{ statName: "magicStrength", amount: 1 }]
 );
 
 export const BASIC_STAFF = new Item(
@@ -46,12 +52,7 @@ export const BASIC_STAFF = new Item(
   "Seems Basic. Adds +3 total MP.",
   require("@/assets/images/items/basic_staff.png"),
   20,
-  (store: any) => {
-    store.commit("addStat", "MP", 3);
-  },
-  (store: any) => {
-    store.commit("addStat", "MP", -3);
-  }
+  [{ statName: "MP", amount: 3 }]
 );
 
 export const BASIC_WAND = new Item(
@@ -60,12 +61,7 @@ export const BASIC_WAND = new Item(
   "Seems Basic. Adds +2 magicStrength.",
   require("@/assets/images/items/basic_wand.png"),
   20,
-  (store: any) => {
-    store.commit("addStat", "magicStrength", 2);
-  },
-  (store: any) => {
-    store.commit("addStat", "magicStrength", -2);
-  }
+  [{ statName: "magicStrength", amount: 2 }]
 );
 
 export const FIRE_EYE_STAFF = new Item(
@@ -74,12 +70,7 @@ export const FIRE_EYE_STAFF = new Item(
   "You feel the magic burn in you. Adds +5 magicStrength.",
   require("@/assets/images/items/fire_eye_staff.png"),
   100,
-  (store: any) => {
-    store.commit("addStat", "magicStrength", 5);
-  },
-  (store: any) => {
-    store.commit("addStat", "magicStrength", -5);
-  }
+  [{ statName: "magicStrength", amount: 5 }]
 );
 
 export const SPARK_WAND = new Item(
@@ -88,12 +79,7 @@ export const SPARK_WAND = new Item(
   "You can see sparks. Cool. +5 luck.",
   require("@/assets/images/items/spark_wand.png"),
   100,
-  (store: any) => {
-    store.commit("addStat", "luck", 5);
-  },
-  (store: any) => {
-    store.commit("addStat", "luck", -5);
-  }
+  [{ statName: "luck", amount: 5 }]
 );
 
 export const MAGIC_STAFF = new Item(
@@ -102,30 +88,22 @@ export const MAGIC_STAFF = new Item(
   "Just powerful magic. +5 magicStrength, +5 MP.",
   require("@/assets/images/items/magic_staff.png"),
   150,
-  (store: any) => {
-    store.commit("addStat", "magicStrength", 5);
-    store.commit("addStat", "MP", 5);
-  },
-  (store: any) => {
-    store.commit("addStat", "magicStrength", -5);
-    store.commit("addStat", "MP", -5);
-  }
+  [
+    { statName: "magicStrength", amount: 5 },
+    { statName: "MP", amount: 5 }
+  ]
 );
 
 export const MINOTAURS_MIGHT = new Item(
   "minotaurs_might",
   "Minotaur's Might",
-  "Bullish power rushes through your veins. +20 HP, +5 magicStrength.",
+  "Bullish power rushes through your veins. +25 HP, +5 magicStrength.",
   require("@/assets/images/items/minotaurs_might_staff.png"),
   250,
-  (store: any) => {
-    store.commit("addStat", "HP", 20);
-    store.commit("addStat", "magicStrength", 5);
-  },
-  (store: any) => {
-    store.commit("addStat", "HP", -20);
-    store.commit("addStat", "magicStrength", -5);
-  }
+  [
+    { statName: "HP", amount: 25 },
+    { statName: "magicStrength", amount: 5 }
+  ]
 );
 
 export const STAFF_OF_MANA = new Item(
@@ -134,12 +112,7 @@ export const STAFF_OF_MANA = new Item(
   "Mana flows thats all it knows. +25 MP.",
   require("@/assets/images/items/staff_of_mana.png"),
   500,
-  (store: any) => {
-    store.commit("addStat", "MP", 25);
-  },
-  (store: any) => {
-    store.commit("addStat", "MP", -25);
-  }
+  [{ statName: "MP", amount: 25 }]
 );
 
 export const WAND_OF_WEALTH = new Item(
@@ -148,12 +121,7 @@ export const WAND_OF_WEALTH = new Item(
   "You're going to be rich! +25 luck!",
   require("@/assets/images/items/wand_of_wealth.png"),
   750,
-  (store: any) => {
-    store.commit("addStat", "luck", 25);
-  },
-  (store: any) => {
-    store.commit("addStat", "luck", -25);
-  }
+  [{ statName: "luck", amount: 25 }]
 );
 
 export const STAFF_OF_WEALTH = new Item(
@@ -162,26 +130,16 @@ export const STAFF_OF_WEALTH = new Item(
   "You're going to be rich! +50 luck!",
   require("@/assets/images/items/staff_of_wealth.png"),
   1500,
-  (store: any) => {
-    store.commit("addStat", "luck", 50);
-  },
-  (store: any) => {
-    store.commit("addStat", "luck", -50);
-  }
+  [{ statName: "luck", amount: 50 }]
 );
 
 export const STAFF_OF_HEALTH = new Item(
   "staff_of_health",
   "Staff of Health",
-  "You feel ... healthy. +50 HP.",
+  "You feel ... healthy. +100 HP.",
   require("@/assets/images/items/staff_of_health.png"),
   1000,
-  (store: any) => {
-    store.commit("addStat", "HP", 50);
-  },
-  (store: any) => {
-    store.commit("addStat", "HP", -50);
-  }
+  [{ statName: "HP", amount: 100 }]
 );
 
 export const WAND_OF_MAGIC = new Item(
@@ -190,12 +148,8 @@ export const WAND_OF_MAGIC = new Item(
   "It caries the magic. +66 MP, +6 magicStrength.",
   require("@/assets/images/items/wand_of_magic.png"),
   1500,
-  (store: any) => {
-    store.commit("addStat", "MP", 66);
-    store.commit("addStat", "magicStrength", 6);
-  },
-  (store: any) => {
-    store.commit("addStat", "MP", -66);
-    store.commit("addStat", "magicStrength", -6);
-  }
+  [
+    { statName: "MP", amount: 66 },
+    { statName: "magicStrength", amount: 6 }
+  ]
 );

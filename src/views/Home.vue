@@ -10,7 +10,24 @@
   >
     <div class="overlay"></div>
     <NavBar :location="user.map.name" />
-    <div class="enemy-container" v-if="monster">
+    <div class="success-container" v-if="user.dead">
+      <a>You Died</a>
+      <div class="success-container__next" @click="confirmDeath()">
+        <img src="../assets/images/fight.png" /> Onward!
+      </div>
+    </div>
+    <div class="success-container" v-else-if="user.levelUp">
+      <a>Level Up</a>
+      <div class="success-container__stat">
+        <img src="../assets/images/fight.png" />
+        <a>stat points</a>
+        <a>+5</a>
+      </div>
+      <div class="success-container__next" @click="confirmLevelUp()">
+        <img src="../assets/images/fight.png" /> Onward!
+      </div>
+    </div>
+    <div class="enemy-container" v-else-if="monster">
       <div
         class="info"
         v-for="info of infos"
@@ -115,6 +132,16 @@ export default class Home extends Vue {
   attackInterval: number | undefined = undefined;
 
   mounted() {
+    this.getMonster();
+  }
+
+  confirmDeath() {
+    this.$store.commit("confirmDeath");
+    this.getMonster();
+  }
+
+  confirmLevelUp() {
+    this.$store.commit("confirmLevelUp");
     this.getMonster();
   }
 

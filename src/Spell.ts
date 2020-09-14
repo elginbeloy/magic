@@ -24,12 +24,14 @@ export interface Spell {
 }
 
 // Returns the attack damage result from a baseDamage.
-const getAttackDamage = (baseDamage: number) => {
+const getAttackDamage = (baseDamage: number, magicPrecision: number) => {
   const chance = Math.random();
-  if (chance < 0.1) {
+  const chanceOfMiss = 0.1 / (magicPrecision / 10);
+  const chanceOfCrit = magicPrecision / 500;
+  if (chance < chanceOfMiss) {
     // Miss does zero damage.
     return 0;
-  } else if (chance > 0.9) {
+  } else if (chance > 1 - chanceOfCrit) {
     // Critical hit does up to 5x baseDamage.
     return Math.round(baseDamage * (1 + Math.random() * 5));
   }
@@ -159,7 +161,10 @@ magicAttack.effect = (
   ];
 
   if (user.mana >= magicAttack.manaCost) {
-    const damage = getAttackDamage(0.5 * user.magicStrength);
+    const damage = getAttackDamage(
+      0.5 * user.magicStrength,
+      user.magicPrecision
+    );
     store.commit("addMana", -magicAttack.manaCost);
     store.dispatch("attackMonster", damage);
 
@@ -199,7 +204,7 @@ fireSpell.effect = (
   ];
 
   if (user.mana >= fireSpell.manaCost) {
-    const damage = getAttackDamage(user.magicStrength);
+    const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
 
     store.commit("addMana", -fireSpell.manaCost);
     store.dispatch("attackMonster", damage);
@@ -207,7 +212,7 @@ fireSpell.effect = (
     store.commit(
       "addEffectInterval",
       setInterval(() => {
-        const burn = getAttackDamage(5);
+        const burn = getAttackDamage(5, user.magicPrecision);
         store.dispatch("attackMonster", burn);
         addInfoPopups([
           {
@@ -255,7 +260,10 @@ fireSpell2.effect = (
   ];
 
   if (user.mana >= fireSpell2.manaCost) {
-    const damage = getAttackDamage(user.magicStrength * 1.25);
+    const damage = getAttackDamage(
+      user.magicStrength * 1.25,
+      user.magicPrecision
+    );
 
     store.commit("addMana", -fireSpell2.manaCost);
     store.dispatch("attackMonster", damage);
@@ -263,7 +271,7 @@ fireSpell2.effect = (
     store.commit(
       "addEffectInterval",
       setInterval(() => {
-        const burn = getAttackDamage(10);
+        const burn = getAttackDamage(10, user.magicPrecision);
         store.dispatch("attackMonster", burn);
         addInfoPopups([
           {
@@ -311,7 +319,7 @@ fireSpell3.effect = (
   ];
 
   if (user.mana >= fireSpell3.manaCost) {
-    const damage = getAttackDamage(user.magicStrength * 2);
+    const damage = getAttackDamage(user.magicStrength * 2, user.magicPrecision);
 
     store.commit("addMana", -fireSpell3.manaCost);
     store.dispatch("attackMonster", damage);
@@ -319,7 +327,7 @@ fireSpell3.effect = (
     store.commit(
       "addEffectInterval",
       setInterval(() => {
-        const burn = getAttackDamage(25);
+        const burn = getAttackDamage(25, user.magicPrecision);
         store.dispatch("attackMonster", burn);
         addInfoPopups([
           {
@@ -367,7 +375,10 @@ lifeLeach.effect = (
   ];
 
   if (user.mana >= lifeLeach.manaCost) {
-    const damage = getAttackDamage(user.magicStrength * 0.5);
+    const damage = getAttackDamage(
+      user.magicStrength * 0.5,
+      user.magicPrecision
+    );
 
     store.commit("addMana", -lifeLeach.manaCost);
     store.dispatch("attackMonster", damage);
@@ -409,7 +420,7 @@ lifeLeach2.effect = (
   ];
 
   if (user.mana >= lifeLeach2.manaCost) {
-    const damage = getAttackDamage(user.magicStrength);
+    const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
 
     store.commit("addMana", -lifeLeach2.manaCost);
     store.dispatch("attackMonster", damage);

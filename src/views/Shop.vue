@@ -106,7 +106,6 @@ export default class Shop extends Vue {
 
   select(selected: Spell | Item) {
     this.selected = selected;
-    console.log(this.userHasSpell(selected.key));
   }
 
   get selectedIsSpell(): boolean {
@@ -138,11 +137,14 @@ export default class Shop extends Vue {
       } else {
         this.$store.commit("equipSpellByKey", this.selected.key);
       }
-    } else if (this.selected) {
+    } else if (this.selected && this.selected instanceof Item) {
       if (this.user.equippedItems[this.selected.key]) {
         this.$store.commit("unequipItemByKey", this.selected.key);
+        this.selected.unequip(this.$store);
+        console.log("unequip");
       } else {
         this.$store.commit("equipItemByKey", this.selected.key);
+        this.selected.equip(this.$store);
       }
     }
   }

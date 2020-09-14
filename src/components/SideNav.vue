@@ -15,9 +15,12 @@
         </div>
       </div>
       <div class="stat" v-for="stat of USER_STAT" :key="stat">
-        <a>{{ USER_STAT_DISPLAY_NAME_MAP[stat] }}</a>
+        <a>
+          {{ USER_STAT_DISPLAY_NAME_MAP[stat] }}
+          <sup v-if="stat == 'HP'">(+5)</sup>
+        </a>
         <div>
-          <a>{{ user[stat] }}</a>
+          <a> {{ user[stat] }} </a>
           <button @click="addStat(stat)">+</button>
         </div>
       </div>
@@ -112,6 +115,12 @@ export default class SideNav extends Vue {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  sup {
+    font-size: 10px;
+    color: $primary-blue;
+    letter-spacing: 2px;
+  }
 
   button {
     background-color: transparent;

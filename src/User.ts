@@ -1,6 +1,6 @@
 import { Spell, DEFAULT_SPELLS } from "./Spell";
 import { LocationMap, MAPS } from "./LocationMap";
-import { Item, WIZARD_HAT, BASIC_STAFF, BASIC_WAND } from "./Item";
+import { Item } from "./Item";
 
 export interface User {
   exp: number;
@@ -14,15 +14,21 @@ export interface User {
   inventorySize: number;
   magicIQ: number;
   magicStrength: number;
+  magicPrecision: number;
   luck: number;
 
   health: number;
   mana: number;
   gold: number;
 
+  // Used to show the victory screen rewards.
   lastGoldReward?: number;
   lastExpReward?: number;
   lastItemReward?: Item;
+
+  // Used to show the death / level up screens.
+  dead: boolean;
+  levelUp: boolean;
 
   spells: { [spellName: string]: Spell };
   equippedSpells: { [spellName: string]: Spell };
@@ -39,6 +45,7 @@ export enum USER_STAT {
   MP = "MP",
   MAGIC_IQ = "magicIQ",
   MAGIC_STRENGTH = "magicStrength",
+  MAGIC_PRECISION = "magicPrecision",
   LUCK = "luck"
 }
 
@@ -47,6 +54,7 @@ export const USER_STAT_DISPLAY_NAME_MAP: { [key in USER_STAT]: string } = {
   [USER_STAT.MP]: "MP",
   [USER_STAT.MAGIC_IQ]: "Magic IQ",
   [USER_STAT.MAGIC_STRENGTH]: "Magic Strength",
+  [USER_STAT.MAGIC_PRECISION]: "Magic Precision",
   [USER_STAT.LUCK]: "Luck"
 };
 
@@ -85,10 +93,13 @@ export const BASE_USER: User = {
   inventorySize: 5,
   magicIQ: 5,
   magicStrength: 5,
+  magicPrecision: 5,
   luck: 5,
   health: 20,
   mana: 5,
   gold: 0,
+  dead: false,
+  levelUp: false,
   spells: { ...DEFAULT_SPELLS },
   equippedSpells: { ...DEFAULT_SPELLS },
   maxSpells: 5,
