@@ -170,10 +170,15 @@ export default new Vuex.Store({
       Vue.set(state.user, "items", [...state.user.items, item]);
     },
     sellItem(state, item: Item) {
+      const equippedItems = { ...state.user.equippedItems };
+      delete equippedItems[item.key];
+
       const items = state.user.items.filter(
         (currentItem: Item) => currentItem.key !== item.key
       );
+
       Vue.set(state.user, "items", items);
+      Vue.set(state.user, "equippedItems", equippedItems);
       Vue.set(state.user, "gold", state.user.gold + item.sellValue);
     },
     removeItemByName(state, name: string) {

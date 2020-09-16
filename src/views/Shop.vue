@@ -123,11 +123,11 @@ export default class Shop extends Vue {
   }
 
   sellItem() {
-    if (this.selected && !this.selectedIsSpell) {
+    if (this.selected && this.selected instanceof Item) {
       this.$store.commit("sellItem", this.selected);
     }
 
-    this.selected = this.user.equippedSpells[0];
+    this.selected = this.user.equippedSpells["healthRegain"];
   }
 
   equip() {
