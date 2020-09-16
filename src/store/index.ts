@@ -116,7 +116,8 @@ export default new Vuex.Store({
           level: state.user.level + 1,
           exp: 0,
           statPoints: state.user.statPoints + 5,
-          levelUp: true
+          levelUp: true,
+          lastGoldReward: Math.round((state.user.level + 2) ** 2.75)
         };
       }
     },

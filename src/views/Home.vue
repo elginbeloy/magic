@@ -23,6 +23,11 @@
         <a>stat points</a>
         <a>+5</a>
       </div>
+      <div class="success-container__stat">
+        <img src="../assets/images/shop.png" />
+        <a>gold</a>
+        <a>+{{ user.lastGoldReward }}</a>
+      </div>
       <div class="success-container__next" @click="confirmLevelUp()">
         <img src="../assets/images/fight.png" /> Onward!
       </div>
