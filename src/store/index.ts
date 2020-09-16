@@ -173,7 +173,7 @@ export default new Vuex.Store({
         (currentItem: Item) => currentItem.key !== item.key
       );
       Vue.set(state.user, "items", items);
-      Vue.set(state.user, "gold", item.sellValue);
+      Vue.set(state.user, "gold", state.user.gold + item.sellValue);
     },
     removeItemByName(state, name: string) {
       Vue.set(

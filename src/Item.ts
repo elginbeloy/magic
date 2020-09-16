@@ -24,7 +24,6 @@ export class Item {
 
   equip(store: any) {
     for (const effect of this.effects) {
-      console.log(effect);
       store.commit("addStatAmount", effect);
     }
   }
