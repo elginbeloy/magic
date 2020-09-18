@@ -68,14 +68,20 @@
       </div>
       <div class="subtitle">Items</div>
       <div class="items-container">
-        <div class="item" v-for="item of user.map.items" :key="item.item.name">
+        <div class="item" v-for="item of availableItems" :key="item.item.name">
           <img :src="item.item.imagePath" />
           <div>
             <a class="name">{{ item.item.name }}</a>
           </div>
           <div>
             <a>Probability</a>
-            <a class="desc">{{ item.probability * 100 }}%</a>
+            <a class="desc" v-if="item.probabilityHigh === item.probabilityLow">
+              {{ item.probabilityLow * 100 }}%
+            </a>
+            <a class="desc" v-else>
+              {{ item.probabilityLow * 100 }}% -
+              {{ item.probabilityHigh * 100 }}%
+            </a>
           </div>
           <div>
             <a>Sell Value</a>
@@ -96,6 +102,7 @@ import NavBar from "@/components/NavBar.vue";
 import { mapState } from "vuex";
 import { MAPS, LocationMap } from "@/LocationMap.ts";
 import { User } from "@/User";
+import { Item } from "@/Item";
 
 @Component({
   computed: mapState(["user"]),
@@ -111,6 +118,43 @@ export default class Map extends Vue {
     if (map.magicIQRequired <= this.user.magicIQ) {
       this.$store.commit("setMap", map);
     }
+  }
+
+  get availableItems(): {
+    [itemKey: string]: {
+      item: Item;
+      probabilityLow: number;
+      probabilityHigh: number;
+    };
+  } {
+    const items: {
+      [itemKey: string]: {
+        item: Item;
+        probabilityLow: number;
+        probabilityHigh: number;
+      };
+    } = {};
+
+    const monsters = this.user.map.monsters.map(monster => monster.monster);
+    for (const monster of monsters) {
+      for (const item of monster.itemOptions) {
+        if (items[item.item.key]) {
+          if (item.probability < items[item.item.key].probabilityLow) {
+            items[item.item.key].probabilityLow = item.probability;
+          } else if (item.probability > items[item.item.key].probabilityHigh) {
+            items[item.item.key].probabilityHigh = item.probability;
+          }
+        } else {
+          items[item.item.key] = {
+            item: item.item,
+            probabilityLow: item.probability,
+            probabilityHigh: item.probability
+          };
+        }
+      }
+    }
+
+    return items;
   }
 }
 </script>

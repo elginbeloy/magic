@@ -1,6 +1,16 @@
 <template>
   <div class="side-nav">
     <LevelIndicator />
+
+    <div class="tasks-container">
+      <router-link to="tasks">
+        <div class="tasks-button">
+          <img src="../assets/images/task_book.png" /> Task List
+          <img src="../assets/images/task_book.png" />
+        </div>
+      </router-link>
+    </div>
+
     <div class="stats-container">
       <div class="stat">
         <a>Gold:</a>
@@ -25,6 +35,7 @@
         </div>
       </div>
     </div>
+
     <div class="status-container">
       <div class="health-indicator">
         <span
@@ -104,7 +115,7 @@ export default class SideNav extends Vue {
 
 .stats-container {
   width: 100%;
-  margin-top: 40px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -147,10 +158,48 @@ export default class SideNav extends Vue {
   }
 }
 
+.tasks-container {
+  position: relative;
+  width: 100%;
+  margin-top: 40px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    width: 100%;
+  }
+
+  .tasks-button {
+    width: 100%;
+    font-size: 18px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    color: #fff;
+    transition: 0.1s linear all;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  &:hover .tasks-button {
+    letter-spacing: 8px;
+    color: $primary-blue;
+  }
+}
+
 .status-container {
   position: relative;
   width: 100%;
-  height: auto;
   padding: 10px;
 
   margin-top: auto;

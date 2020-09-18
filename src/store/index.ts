@@ -74,8 +74,8 @@ export default new Vuex.Store({
     setLastExpReward(state, lastExpReward: number) {
       Vue.set(state.user, "lastExpReward", lastExpReward);
     },
-    setLastItemReward(state, item: Item | undefined) {
-      Vue.set(state.user, "lastItemReward", item);
+    setLastRewardItems(state, items: Item[]) {
+      Vue.set(state.user, "lastRewardItems", items);
     },
     addHealth(state, health: number) {
       Vue.set(
@@ -230,16 +230,17 @@ export default new Vuex.Store({
               Math.random() * context.state.monster.level)
         );
 
-        context.commit("setLastItemReward", undefined); // Reset item reward.
-        for (const item of context.state.user.map.items) {
-          const itemRoll = Math.random();
+        const rewardItems: Item[] = [];
+        for (const item of context.state.monster.itemOptions) {
+          const itemRoll =
+            Math.random() * (1 / (context.state.user.luck / 5) ** 0.1);
           if (itemRoll <= item.probability) {
             context.commit("addItem", item.item);
-            context.commit("setLastItemReward", item.item);
-            break;
+            rewardItems.push(item);
           }
         }
 
+        context.commit("setLastRewardItems", rewardItems);
         context.commit("addGold", goldReward);
         context.commit("addExp", expReward);
         context.commit("setLastGoldReward", goldReward);

@@ -33,7 +33,7 @@ export default class LevelIndicator extends Vue {
 .level-indicator {
   position: relative;
   width: 100%;
-  margin-top: 40px;
+  margin-top: 20px;
 
   display: flex;
   flex-direction: column;
