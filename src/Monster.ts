@@ -9,6 +9,7 @@ import {
   FIRE_EYE_STAFF,
   MAGIC_STAFF,
   MINOTAURS_MIGHT,
+  GHOST_STONE,
   SOUL_STONE,
   STAFF_OF_MANA,
   WAND_OF_WEALTH,
@@ -41,10 +42,9 @@ const attack = (
   addInfoPopups: (popups: InfoPopup[]) => void,
   addOuch: () => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
   const damage = getMonsterAttackDamage(strength);
   store.commit("addHealth", -damage);
-  addInfoPopups([{ text: `-${damage} Health`, colorHex: "#d7263d", xOffset }]);
+  addInfoPopups([{ text: `-${damage} Health`, colorHex: "#d7263d" }]);
 
   addOuch();
 };
@@ -114,7 +114,10 @@ export const GHOST = new MonsterType(
   1,
   1,
   2,
-  [{ item: WIZARD_HAT, probability: 0.05 }]
+  [
+    { item: GHOST_STONE, probability: 1.0 },
+    { item: WIZARD_HAT, probability: 0.05 }
+  ]
 );
 
 export const ZOMBIE = new MonsterType(

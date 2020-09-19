@@ -1,49 +1,56 @@
 <template>
   <div
-    class="home"
+    class="adventure"
     :class="{ ouch: ouch }"
     :style="{ 'background-image': `url('${user.map.imagePath}'` }"
     @keydown="castSpellKey"
-    @keydown.enter="getMonster"
+    @keydown.enter="confirm"
     tabindex="-1"
     id="app-content"
   >
     <div class="overlay"></div>
     <NavBar :location="user.map.name" />
-    <div class="success-container" v-if="user.dead">
-      <a>You Died</a>
-      <div class="success-container__next" @click="confirmDeath()">
-        <img src="../assets/images/fight.png" /> Onward!
-      </div>
-    </div>
-    <div class="success-container" v-else-if="user.levelUp">
-      <a>Level Up</a>
-      <div class="success-container__stat">
-        <img src="../assets/images/fight.png" />
-        <a>stat points</a>
-        <a>+5</a>
-      </div>
-      <div class="success-container__stat">
-        <img src="../assets/images/shop.png" />
-        <a>gold</a>
-        <a>+{{ user.lastGoldReward }}</a>
-      </div>
-      <div class="success-container__next" @click="confirmLevelUp()">
-        <img src="../assets/images/fight.png" /> Onward!
-      </div>
-    </div>
+
+    <alert-container
+      v-if="user.dead"
+      bannerText="You Died"
+      nextButtonText="Fuck This Game!"
+      :bannerIcon="false"
+      :nextButtonIcon="fightImage"
+      :onNext="confirm"
+    ></alert-container>
+    <alert-container
+      v-else-if="user.levelUp"
+      bannerText="Level Up"
+      nextButtonText="Onward!"
+      :nextButtonIcon="fightImage"
+      :onNext="confirm"
+      :stats="[
+        {
+          iconImage: fightImage,
+          titleText: 'stat points',
+          changeText: '+5'
+        },
+        {
+          iconImage: shopImage,
+          titleText: 'gold',
+          changeText: user.lastGoldReward
+        }
+      ]"
+    ></alert-container>
     <div class="enemy-container" v-else-if="monster">
-      <div
+      <a
         class="info"
         v-for="info of infos"
         :key="`info-${info.xOffset}-${info.text}`"
         :style="{
           color: info.colorHex,
-          marginLeft: (info.xOffset || 0) + 'px'
+          left: `calc(${info.xOffset || 0}% - 100px)`,
+          top: `calc(${info.xOffset || 0}% - 25px)`
         }"
       >
         {{ info.text }}
-      </div>
+      </a>
       <div class="stats-container">
         <a>{{ monster.name }}</a>
         <a>lvl. {{ monster.level }}</a>
@@ -59,30 +66,31 @@
       </div>
       <img :src="monster.imagePath" class="enemy" />
     </div>
-    <div class="success-container" v-else>
-      <a>victory</a>
-      <div class="success-container__stat">
-        <img src="../assets/images/shop.png" />
-        <a>gold</a>
-        <a>+{{ user.lastGoldReward }}</a>
-      </div>
-      <div class="success-container__stat">
-        <img src="../assets/images/exp.png" />
-        <a>exp</a>
-        <a>+{{ user.lastExpReward }}</a>
-      </div>
-      <div
-        class="success-container__stat"
-        v-for="item of user.lastRewardItems"
-        :key="`reward-item-${item.key}`"
-      >
-        <img :src="item.imagePath" />
-        <a style="font-size: 18px">{{ item.name }}</a>
-      </div>
-      <div class="success-container__next" @click="getMonster()">
-        <img src="../assets/images/fight.png" /> Onward!
-      </div>
-    </div>
+    <alert-container
+      v-else
+      bannerText="Victory"
+      nextButtonText="Onward!"
+      :nextButtonIcon="fightImage"
+      :onNext="confirm"
+      :stats="[
+        {
+          iconImage: shopImage,
+          titleText: 'gold',
+          changeText: user.lastGoldReward
+        },
+        {
+          iconImage: expImage,
+          titleText: 'exp',
+          changeText: user.lastExpReward
+        }
+      ]"
+      :items="
+        user.lastRewardItems.map(item => {
+          return { iconImage: item.imagePath, titleText: item.name };
+        })
+      "
+    ></alert-container>
+
     <div class="spells-container">
       <div
         class="spell"
@@ -111,7 +119,7 @@
           disabled: true
         }"
       >
-        <img src="../assets/images/lock.png" />
+        <img src="../../assets/images/lock.png" />
       </div>
     </div>
   </div>
@@ -124,33 +132,38 @@ import { Spell, InfoPopup } from "@/Spell";
 import { Monster, getNextMonster } from "@/Monster.ts";
 import LevelIndicator from "@/components/LevelIndicator.vue";
 import NavBar from "@/components/NavBar.vue";
+import AlertContainer from "./components/AlertContainer.vue";
 import { mapState } from "vuex";
 
 @Component({
   computed: mapState(["user", "monster"]),
   components: {
     LevelIndicator,
-    NavBar
+    NavBar,
+    AlertContainer
   }
 })
-export default class Home extends Vue {
+export default class Adventure extends Vue {
   user!: User;
   monster!: Monster | null;
   infos: InfoPopup[] = [];
   ouch = false;
   attackInterval: number | undefined = undefined;
+  fightImage: string = require("@/assets/images/fight.png");
+  shopImage: string = require("@/assets/images/shop.png");
+  expImage: string = require("@/assets/images/exp.png");
 
   mounted() {
     this.getMonster();
   }
 
-  confirmDeath() {
-    this.$store.commit("confirmDeath");
-    this.getMonster();
-  }
+  confirm() {
+    if (this.user.dead) {
+      this.$store.commit("confirmDeath");
+    } else if (this.user.levelUp) {
+      this.$store.commit("confirmLevelUp");
+    }
 
-  confirmLevelUp() {
-    this.$store.commit("confirmLevelUp");
     this.getMonster();
   }
 
@@ -213,28 +226,30 @@ export default class Home extends Vue {
 
   addInfoPopups(popups: InfoPopup[]) {
     // Assign random x offset.
-    const xOffset = Math.random() * 500 - 250;
+    const xOffset = Math.round(Math.random() * 100);
+    const yOffset = Math.round(Math.random() * 100);
 
     for (let index = 0; index < popups.length; index++) {
       setTimeout(() => {
         this.infos.push({
           ...popups[index],
-          xOffset: popups[index].xOffset || xOffset
+          xOffset: popups[index].xOffset || xOffset,
+          yOffset: popups[index].yOffset || yOffset
         });
 
         setTimeout(() => {
           this.infos.shift();
         }, 1800);
-      }, 1 + 300 * index);
+      }, 1 + 400 * index);
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-@import "../styles.scss";
+@import "../../styles.scss";
 
-.home {
+.adventure {
   position: absolute;
   top: 0;
   left: 0;
@@ -273,6 +288,7 @@ export default class Home extends Vue {
   position: relative;
   width: 500px;
   height: 500px;
+  overflow: visible;
 
   display: flex;
   flex-direction: column;
@@ -305,17 +321,16 @@ export default class Home extends Vue {
 .info {
   position: absolute;
   z-index: 100;
-  width: 100%;
-  height: 50px;
-  top: calc(50% - 60px);
+  top: 0;
   left: 0;
+  width: 200px;
+  height: 50px;
 
   font-family: inherit;
-
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: infoPopup 2.5s ease-in-out;
+  animation: infoPopup 2s ease-in-out;
 }
 
 @keyframes infoPopup {
@@ -324,9 +339,9 @@ export default class Home extends Vue {
     opacity: 1;
   }
   100% {
-    font-size: 56px;
+    font-size: 32px;
     opacity: 0;
-    transform: translateY(-120px);
+    transform: translateY(-96px);
   }
 }
 
@@ -346,67 +361,6 @@ export default class Home extends Vue {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-}
-
-.success-container {
-  position: relative;
-  font-size: 52px;
-  color: #fff;
-  line-height: 96px;
-  text-transform: uppercase;
-  letter-spacing: 8px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  &__stat {
-    position: relative;
-    width: 100%;
-
-    font-size: 24px;
-    letter-spacing: 4px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    img {
-      width: 40px;
-      height: 40px;
-    }
-  }
-
-  &__next {
-    position: relative;
-    width: 100%;
-
-    background-color: transparent;
-    outline: 0;
-    border: 0;
-    font-size: 28px;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 6px;
-    font-family: inherit;
-    transition: 0.2s linear all;
-    cursor: pointer;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    img {
-      position: relative;
-      width: 32px;
-      height: 32px;
-    }
-
-    &:hover {
-      filter: drop-shadow(0px 0px 8px $primary-blue);
-    }
-  }
 }
 
 .spell {

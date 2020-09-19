@@ -100,13 +100,14 @@ export default class SideNav extends Vue {
 
 .side-nav {
   position: absolute;
+  z-index: 1000;
   top: 0;
   left: 0;
   width: 300px;
   height: 100%;
   padding: 20px;
-  background-color: #2b232d;
-  box-shadow: 0 0 4px 1px #00000040;
+  background-color: #28222a;
+  box-shadow: 0 0 24px 8px #28222a;
 
   display: flex;
   flex-direction: column;

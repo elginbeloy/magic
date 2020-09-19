@@ -5,6 +5,7 @@ export interface InfoPopup {
   text: string;
   colorHex: string;
   xOffset?: number;
+  yOffset?: number;
 }
 
 export interface Spell {
