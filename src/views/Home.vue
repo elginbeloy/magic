@@ -307,7 +307,7 @@ export default class Home extends Vue {
   z-index: 100;
   width: 100%;
   height: 50px;
-  top: calc(50% - 50px);
+  top: calc(50% - 60px);
   left: 0;
 
   font-family: inherit;
@@ -315,7 +315,7 @@ export default class Home extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: infoPopup 3s ease-in-out;
+  animation: infoPopup 2.5s ease-in-out;
 }
 
 @keyframes infoPopup {
@@ -326,7 +326,7 @@ export default class Home extends Vue {
   100% {
     font-size: 56px;
     opacity: 0;
-    transform: translateY(-96px);
+    transform: translateY(-120px);
   }
 }
 
