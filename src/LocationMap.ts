@@ -15,7 +15,8 @@ import {
   PROTECTOR_OF_THE_SEA,
   KAPPA,
   NECROMANCER,
-  NICO_WOLF
+  NICO_WOLF,
+  MECI_WOLF
 } from "./Monster";
 
 export interface LocationMap {
@@ -33,7 +34,7 @@ export const MAPS: LocationMap[] = [
       { monster: ZOMBIE, probability: 0.3 },
       { monster: GOBLIN, probability: 0.15 },
       { monster: OGRE, probability: 0.1 },
-      { monster: MINOTAUR, probability: 0.05 },
+      { monster: MINOTAUR, probability: 0.04 },
       { monster: NICO_WOLF, probability: 0.01 }
     ],
     imagePath: require("@/assets/images/mystical_forest.jpg"),
@@ -42,10 +43,11 @@ export const MAPS: LocationMap[] = [
   {
     name: "Mountain Passage",
     monsters: [
-      { monster: MINOTAUR, probability: 0.4 },
-      { monster: OGRE, probability: 0.2 },
+      { monster: MINOTAUR, probability: 0.3 },
+      { monster: MECI_WOLF, probability: 0.2 },
+      { monster: OGRE, probability: 0.15 },
       { monster: GOBLIN, probability: 0.15 },
-      { monster: WIZARD_HUNTING_WARRIOR, probability: 0.15 },
+      { monster: WIZARD_HUNTING_WARRIOR, probability: 0.1 },
       { monster: CHIMERA, probability: 0.08 },
       { monster: HOSTILE_WIZARD, probability: 0.02 }
     ],

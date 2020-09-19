@@ -192,6 +192,21 @@ export const WIZARD_HUNTING_ARCHER = new MonsterType(
   ]
 );
 
+export const MECI_WOLF = new MonsterType(
+  "Meci Wolf",
+  require("@/assets/images/monsters/meci_wolf.png"),
+  25,
+  1.5,
+  2,
+  1.5,
+  [
+    { item: BASIC_STAFF, probability: 0.15 },
+    { item: BASIC_WAND, probability: 0.15 },
+    { item: SPARK_WAND, probability: 0.15 },
+    { item: FIRE_EYE_STAFF, probability: 0.1 }
+  ]
+);
+
 export const OGRE = new MonsterType(
   "Ogre",
   require("@/assets/images/monsters/ogre.png"),
