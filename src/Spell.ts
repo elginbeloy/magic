@@ -4,14 +4,14 @@ import { Monster } from "@/Monster.ts";
 export interface InfoPopup {
   text: string;
   colorHex: string;
-  xOffset: number;
+  xOffset?: number;
 }
 
 export interface Spell {
   key: string;
   name: string;
   desc: string;
-  effect: (
+  cast: (
     user: User,
     monster: Monster,
     store: any,
@@ -49,7 +49,7 @@ export class Spell {
     manaCost,
     imagePath,
     cost = 0
-  }: Omit<Spell, "effect">) {
+  }: Omit<Spell, "cast">) {
     this.key = key;
     this.name = name;
     this.desc = desc;
@@ -59,7 +59,7 @@ export class Spell {
     this.cost = cost;
   }
 
-  effect = (
+  cast = (
     user: User,
     monster: Monster,
     store: any,
@@ -76,38 +76,28 @@ const healthRegain = new Spell({
   name: "Life Regain",
   desc:
     "The first known healing spell. Regain <span class='magic-word'>magicStrength</span> HP.",
-  reloadTimeSeconds: 12.0,
+  reloadTimeSeconds: 5.0,
   manaCost: 2.0,
   imagePath: require("@/assets/images/spells/health_1.png"),
   cost: 0
 });
 
-healthRegain.effect = (
+healthRegain.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  store.commit("addHealth", user.magicStrength);
+  store.commit("addMana", -healthRegain.manaCost);
 
-  if (user.mana >= healthRegain.manaCost) {
-    store.commit("addHealth", user.magicStrength);
-    store.commit("addMana", -healthRegain.manaCost);
-
-    infos = [
-      {
-        text: `+${user.magicStrength} Health`,
-        colorHex: "red",
-        xOffset: Math.round(Math.random() * 250 - 150)
-      },
-      { text: `-${healthRegain.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: `+${user.magicStrength} Health`,
+      colorHex: "red"
+    },
+    { text: `-${healthRegain.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const manaRegain = new Spell({
@@ -115,13 +105,13 @@ const manaRegain = new Spell({
   name: "Magic Regain",
   desc:
     "The first known mana spell. Regain <span class='magic-word'>magicStrength</span> MP.",
-  reloadTimeSeconds: 12.0,
+  reloadTimeSeconds: 5.0,
   manaCost: 0.0,
   imagePath: require("@/assets/images/spells/mana_regain_1.png"),
   cost: 0
 });
 
-manaRegain.effect = (
+manaRegain.cast = (
   user: User,
   monster: Monster,
   store: any,
@@ -132,8 +122,7 @@ manaRegain.effect = (
   addInfoPopups([
     {
       text: `+${user.magicStrength} Mana`,
-      colorHex: "blue",
-      xOffset: Math.round(Math.random() * 250 - 150)
+      colorHex: "blue"
     }
   ]);
 };
@@ -149,36 +138,27 @@ const magicAttack = new Spell({
   cost: 0
 });
 
-magicAttack.effect = (
+magicAttack.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ): void => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  const damage = getAttackDamage(
+    0.25 * user.magicStrength,
+    user.magicPrecision
+  );
 
-  if (user.mana >= magicAttack.manaCost) {
-    const damage = getAttackDamage(
-      0.25 * user.magicStrength,
-      user.magicPrecision
-    );
-    store.commit("addMana", -magicAttack.manaCost);
-    store.dispatch("attackMonster", damage);
+  store.commit("addMana", -magicAttack.manaCost);
+  store.dispatch("attackMonster", damage);
 
-    infos = [
-      {
-        text: damage == 0 ? "Miss!" : `${damage} DMG`,
-        colorHex: "red",
-        xOffset
-      },
-      { text: `-${magicAttack.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: damage == 0 ? "Miss!" : `${damage} DMG`,
+      colorHex: "red"
+    },
+    { text: `-${magicAttack.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const fireSpell = new Spell({
@@ -192,49 +172,38 @@ const fireSpell = new Spell({
   cost: 25
 });
 
-fireSpell.effect = (
+fireSpell.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
 
-  if (user.mana >= fireSpell.manaCost) {
-    const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
+  store.commit("addMana", -fireSpell.manaCost);
+  store.dispatch("attackMonster", damage);
 
-    store.commit("addMana", -fireSpell.manaCost);
-    store.dispatch("attackMonster", damage);
+  store.commit(
+    "addEffectInterval",
+    setInterval(() => {
+      const burn = getAttackDamage(5, user.magicPrecision);
+      store.dispatch("attackMonster", burn);
+      addInfoPopups([
+        {
+          text: `${burn} Burn DMG`,
+          colorHex: "red"
+        }
+      ]);
+    }, 2000)
+  );
 
-    store.commit(
-      "addEffectInterval",
-      setInterval(() => {
-        const burn = getAttackDamage(5, user.magicPrecision);
-        store.dispatch("attackMonster", burn);
-        addInfoPopups([
-          {
-            text: `${burn} Burn DMG`,
-            colorHex: "red",
-            xOffset
-          }
-        ]);
-      }, 2000)
-    );
-
-    infos = [
-      {
-        text: damage == 0 ? "Miss!" : `${damage} DMG`,
-        colorHex: "red",
-        xOffset
-      },
-      { text: `-${fireSpell.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: damage == 0 ? "Miss!" : `${damage} DMG`,
+      colorHex: "red"
+    },
+    { text: `-${fireSpell.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const fireSpell2 = new Spell({
@@ -248,52 +217,41 @@ const fireSpell2 = new Spell({
   cost: 100
 });
 
-fireSpell2.effect = (
+fireSpell2.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  const damage = getAttackDamage(
+    user.magicStrength * 1.25,
+    user.magicPrecision
+  );
 
-  if (user.mana >= fireSpell2.manaCost) {
-    const damage = getAttackDamage(
-      user.magicStrength * 1.25,
-      user.magicPrecision
-    );
+  store.commit("addMana", -fireSpell2.manaCost);
+  store.dispatch("attackMonster", damage);
 
-    store.commit("addMana", -fireSpell2.manaCost);
-    store.dispatch("attackMonster", damage);
+  store.commit(
+    "addEffectInterval",
+    setInterval(() => {
+      const burn = getAttackDamage(10, user.magicPrecision);
+      store.dispatch("attackMonster", burn);
+      addInfoPopups([
+        {
+          text: `${burn} Burn DMG`,
+          colorHex: "red"
+        }
+      ]);
+    }, 2000)
+  );
 
-    store.commit(
-      "addEffectInterval",
-      setInterval(() => {
-        const burn = getAttackDamage(10, user.magicPrecision);
-        store.dispatch("attackMonster", burn);
-        addInfoPopups([
-          {
-            text: `${burn} Burn DMG`,
-            colorHex: "red",
-            xOffset
-          }
-        ]);
-      }, 2000)
-    );
-
-    infos = [
-      {
-        text: damage == 0 ? "Miss!" : `${damage} DMG`,
-        colorHex: "red",
-        xOffset
-      },
-      { text: `-${fireSpell2.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: damage == 0 ? "Miss!" : `${damage} DMG`,
+      colorHex: "red"
+    },
+    { text: `-${fireSpell2.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const fireSpell3 = new Spell({
@@ -307,49 +265,38 @@ const fireSpell3 = new Spell({
   cost: 500
 });
 
-fireSpell3.effect = (
+fireSpell3.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  const damage = getAttackDamage(user.magicStrength * 2, user.magicPrecision);
 
-  if (user.mana >= fireSpell3.manaCost) {
-    const damage = getAttackDamage(user.magicStrength * 2, user.magicPrecision);
+  store.commit("addMana", -fireSpell3.manaCost);
+  store.dispatch("attackMonster", damage);
 
-    store.commit("addMana", -fireSpell3.manaCost);
-    store.dispatch("attackMonster", damage);
+  store.commit(
+    "addEffectInterval",
+    setInterval(() => {
+      const burn = getAttackDamage(25, user.magicPrecision);
+      store.dispatch("attackMonster", burn);
+      addInfoPopups([
+        {
+          text: `${burn} Burn DMG`,
+          colorHex: "red"
+        }
+      ]);
+    }, 2000)
+  );
 
-    store.commit(
-      "addEffectInterval",
-      setInterval(() => {
-        const burn = getAttackDamage(25, user.magicPrecision);
-        store.dispatch("attackMonster", burn);
-        addInfoPopups([
-          {
-            text: `${burn} Burn DMG`,
-            colorHex: "red",
-            xOffset
-          }
-        ]);
-      }, 2000)
-    );
-
-    infos = [
-      {
-        text: damage == 0 ? "Miss!" : `${damage} DMG`,
-        colorHex: "red",
-        xOffset
-      },
-      { text: `-${fireSpell3.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: damage == 0 ? "Miss!" : `${damage} DMG`,
+      colorHex: "red"
+    },
+    { text: `-${fireSpell3.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const lifeLeach = new Spell({
@@ -363,38 +310,25 @@ const lifeLeach = new Spell({
   cost: 250
 });
 
-lifeLeach.effect = (
+lifeLeach.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  const damage = getAttackDamage(user.magicStrength * 0.5, user.magicPrecision);
 
-  if (user.mana >= lifeLeach.manaCost) {
-    const damage = getAttackDamage(
-      user.magicStrength * 0.5,
-      user.magicPrecision
-    );
+  store.commit("addMana", -lifeLeach.manaCost);
+  store.dispatch("attackMonster", damage);
+  store.commit("addHealth", damage);
 
-    store.commit("addMana", -lifeLeach.manaCost);
-    store.dispatch("attackMonster", damage);
-    store.commit("addHealth", damage);
-
-    infos = [
-      {
-        text: damage == 0 ? "Miss!" : `${damage} Life Stolen!`,
-        colorHex: "red",
-        xOffset
-      },
-      { text: `-${lifeLeach.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: damage == 0 ? "Miss!" : `${damage} Life Stolen!`,
+      colorHex: "red"
+    },
+    { text: `-${lifeLeach.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const lifeLeach2 = new Spell({
@@ -408,35 +342,25 @@ const lifeLeach2 = new Spell({
   cost: 1000
 });
 
-lifeLeach2.effect = (
+lifeLeach2.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
 
-  if (user.mana >= lifeLeach2.manaCost) {
-    const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
+  store.commit("addMana", -lifeLeach2.manaCost);
+  store.dispatch("attackMonster", damage);
+  store.commit("addHealth", damage);
 
-    store.commit("addMana", -lifeLeach2.manaCost);
-    store.dispatch("attackMonster", damage);
-    store.commit("addHealth", damage);
-
-    infos = [
-      {
-        text: damage == 0 ? "Miss!" : `${damage} Life Stolen!`,
-        colorHex: "red",
-        xOffset
-      },
-      { text: `-${lifeLeach2.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: damage == 0 ? "Miss!" : `${damage} Life Stolen!`,
+      colorHex: "red"
+    },
+    { text: `-${lifeLeach2.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const lifeLeach3 = new Spell({
@@ -449,35 +373,25 @@ const lifeLeach3 = new Spell({
   cost: 5000
 });
 
-lifeLeach3.effect = (
+lifeLeach3.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  const damage = Math.round(monster.health / 2);
 
-  if (user.mana >= lifeLeach3.manaCost) {
-    const damage = Math.round(monster.health / 2);
+  store.commit("addMana", -lifeLeach3.manaCost);
+  store.dispatch("attackMonster", damage);
+  store.commit("addHealth", damage);
 
-    store.commit("addMana", -lifeLeach3.manaCost);
-    store.dispatch("attackMonster", damage);
-    store.commit("addHealth", damage);
-
-    infos = [
-      {
-        text: "Life Stolen!",
-        colorHex: "red",
-        xOffset
-      },
-      { text: `-${lifeLeach3.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: "Life Stolen!",
+      colorHex: "red"
+    },
+    { text: `-${lifeLeach3.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const brainExpander = new Spell({
@@ -490,32 +404,22 @@ const brainExpander = new Spell({
   cost: 1000
 });
 
-brainExpander.effect = (
+brainExpander.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  store.commit("addMana", -brainExpander.manaCost);
+  store.commit("addStatPoints", 1);
 
-  if (user.mana >= brainExpander.manaCost) {
-    store.commit("addMana", -brainExpander.manaCost);
-    store.commit("addStatPoints", 1);
-
-    infos = [
-      {
-        text: "+1 Stat Point!",
-        colorHex: "gold",
-        xOffset
-      },
-      { text: `-${brainExpander.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: "+1 Stat Point!",
+      colorHex: "gold"
+    },
+    { text: `-${brainExpander.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const deathSpell = new Spell({
@@ -528,34 +432,24 @@ const deathSpell = new Spell({
   cost: 500
 });
 
-deathSpell.effect = (
+deathSpell.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  const damage = Math.round(monster.health / 2);
 
-  if (user.mana >= deathSpell.manaCost) {
-    const damage = Math.round(monster.health / 2);
+  store.commit("addMana", -deathSpell.manaCost);
+  store.dispatch("attackMonster", damage);
 
-    store.commit("addMana", -deathSpell.manaCost);
-    store.dispatch("attackMonster", damage);
-
-    infos = [
-      {
-        text: "Life Stolen!",
-        colorHex: "red",
-        xOffset
-      },
-      { text: `-${deathSpell.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: "Life Stolen!",
+      colorHex: "red"
+    },
+    { text: `-${deathSpell.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const goldGain = new Spell({
@@ -568,32 +462,22 @@ const goldGain = new Spell({
   cost: 500
 });
 
-goldGain.effect = (
+goldGain.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  store.commit("addMana", -goldGain.manaCost);
+  store.commit("addGold", 10 * user.magicStrength);
 
-  if (user.mana >= goldGain.manaCost) {
-    store.commit("addMana", -goldGain.manaCost);
-    store.commit("addGold", 10 * user.magicStrength);
-
-    infos = [
-      {
-        text: `+${10 * user.magicStrength} Gold!`,
-        colorHex: "gold",
-        xOffset
-      },
-      { text: `-${goldGain.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: `+${10 * user.magicStrength} Gold!`,
+      colorHex: "gold"
+    },
+    { text: `-${goldGain.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const goldGain2 = new Spell({
@@ -606,32 +490,22 @@ const goldGain2 = new Spell({
   cost: 2500
 });
 
-goldGain2.effect = (
+goldGain2.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  store.commit("addMana", -goldGain2.manaCost);
+  store.commit("addGold", 25 * user.magicStrength);
 
-  if (user.mana >= goldGain2.manaCost) {
-    store.commit("addMana", -goldGain2.manaCost);
-    store.commit("addGold", 25 * user.magicStrength);
-
-    infos = [
-      {
-        text: `+${25 * user.magicStrength} Gold!`,
-        colorHex: "gold",
-        xOffset
-      },
-      { text: `-${goldGain2.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: `+${25 * user.magicStrength} Gold!`,
+      colorHex: "gold"
+    },
+    { text: `-${goldGain2.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const goldGain3 = new Spell({
@@ -644,35 +518,25 @@ const goldGain3 = new Spell({
   cost: 2500
 });
 
-goldGain3.effect = (
+goldGain3.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  const damage = Math.round(monster.health / 2);
 
-  if (user.mana >= goldGain3.manaCost) {
-    const damage = Math.round(monster.health / 2);
+  store.dispatch("attackMonster", damage);
+  store.commit("addMana", -goldGain3.manaCost);
+  store.commit("addGold", 50 * damage);
 
-    store.dispatch("attackMonster", damage);
-    store.commit("addMana", -goldGain3.manaCost);
-    store.commit("addGold", 50 * damage);
-
-    infos = [
-      {
-        text: `+${damage} Gold!`,
-        colorHex: "gold",
-        xOffset
-      },
-      { text: `-${goldGain3.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: `+${damage} Gold!`,
+      colorHex: "gold"
+    },
+    { text: `-${goldGain3.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 const timeJump = new Spell({
@@ -685,31 +549,21 @@ const timeJump = new Spell({
   cost: 500
 });
 
-timeJump.effect = (
+timeJump.cast = (
   user: User,
   monster: Monster,
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const xOffset = Math.round(Math.random() * 250 - 150);
-  let infos: InfoPopup[] = [
-    { text: "Not Enough Mana!", colorHex: "blue", xOffset }
-  ];
+  store.commit("clearReloadingSpells");
 
-  if (user.mana >= timeJump.manaCost) {
-    store.commit("clearReloadingSpells");
-
-    infos = [
-      {
-        text: `Spells Cleared!`,
-        colorHex: "gold",
-        xOffset
-      },
-      { text: `-${timeJump.manaCost} Mana`, colorHex: "blue", xOffset }
-    ];
-  }
-
-  addInfoPopups(infos);
+  addInfoPopups([
+    {
+      text: `Spells Cleared!`,
+      colorHex: "gold"
+    },
+    { text: `-${timeJump.manaCost} Mana`, colorHex: "blue" }
+  ]);
 };
 
 export const SPELLS: { [spellName: string]: Spell } = {

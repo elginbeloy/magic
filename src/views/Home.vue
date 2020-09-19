@@ -35,11 +35,11 @@
     <div class="enemy-container" v-else-if="monster">
       <div
         class="info"
-        v-for="info of infos"
-        :key="info.xOffset + info.text"
+        v-for="(info, index) of infos"
+        :key="`info-${index}-${info.xOffset}-${info.text}`"
         :style="{
           color: info.colorHex,
-          marginLeft: info.xOffset + 'px'
+          marginLeft: (info.xOffset || 0) + 'px'
         }"
       >
         {{ info.text }}
@@ -176,11 +176,8 @@ export default class Home extends Vue {
   }
 
   castSpell(spell: Spell) {
-    const infos: InfoPopup[] = [
-      { text: "Not Enough Mana!", colorHex: "blue", xOffset: 0 }
-    ];
     if (this.user.mana < spell.manaCost) {
-      this.addInfoPopups(infos);
+      this.addInfoPopups([{ text: "Not Enough Mana!", colorHex: "blue" }]);
       return;
     }
 
@@ -188,8 +185,7 @@ export default class Home extends Vue {
       this.monster !== null &&
       !this.user.reloadingSpells.includes(spell.key)
     ) {
-      // Run the spell effect method and update monster & user w/ the results.
-      spell.effect(
+      spell.cast(
         { ...this.user },
         { ...this.monster },
         this.$store,
@@ -216,9 +212,19 @@ export default class Home extends Vue {
   }
 
   addInfoPopups(popups: InfoPopup[]) {
+    // Assign random x offset.
+    const xOffset = Math.random() * 500 - 250;
+    popups = popups.map((popup: InfoPopup) => {
+      return { ...popup, xOffset };
+    });
+
     for (let index = 0; index < popups.length; index++) {
       setTimeout(() => {
-        this.infos.push(popups[index]);
+        this.infos.push({
+          ...popups[index],
+          xOffset: popups[index].xOffset || xOffset
+        });
+
         setTimeout(() => {
           this.infos.shift();
         }, 1800);

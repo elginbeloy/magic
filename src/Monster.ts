@@ -86,7 +86,7 @@ export class MonsterType {
       this.health * level ** 2 +
         Math.random() * (this.health * level ** 2 * 0.2)
     );
-    const strength = this.strength * level * 0.5;
+    const strength = this.strength * level;
 
     return {
       level,
@@ -120,10 +120,10 @@ export const GHOST = new MonsterType(
 export const ZOMBIE = new MonsterType(
   "Zombie",
   require("@/assets/images/monsters/zombie.png"),
-  8,
-  1.5,
+  6,
+  1,
   1.1,
-  4,
+  2,
   [
     { item: WIZARD_HAT, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.05 },
@@ -134,8 +134,8 @@ export const ZOMBIE = new MonsterType(
 export const GOBLIN = new MonsterType(
   "Goblin",
   require("@/assets/images/monsters/goblin.png"),
-  10,
-  1.75,
+  8,
+  1.5,
   1.2,
   2,
   [
@@ -152,12 +152,12 @@ export const WIZARD_HUNTING_WARRIOR = new MonsterType(
   "Wizard Hunting Warrior",
   require("@/assets/images/monsters/warrior.png"),
   15,
-  2.5,
+  2,
   1.5,
-  3,
+  2.25,
   [
     { item: SOUL_STONE, probability: 1.0 },
-    { item: WIZARD_HAT, probability: 0.25 },
+    { item: WIZARD_HAT, probability: 0.2 },
     { item: BASIC_STAFF, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.15 },
     { item: SPARK_WAND, probability: 0.15 },
@@ -174,12 +174,12 @@ export const WIZARD_HUNTING_ARCHER = new MonsterType(
   "Wizard Hunting Archer",
   require("@/assets/images/monsters/archer.png"),
   10,
-  7.5,
+  2.5,
   1.5,
-  2,
+  1.75,
   [
     { item: SOUL_STONE, probability: 1.0 },
-    { item: WIZARD_HAT, probability: 0.25 },
+    { item: WIZARD_HAT, probability: 0.2 },
     { item: BASIC_STAFF, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.15 },
     { item: SPARK_WAND, probability: 0.15 },
@@ -197,8 +197,8 @@ export const OGRE = new MonsterType(
   require("@/assets/images/monsters/ogre.png"),
   25,
   4,
-  1.5,
-  8,
+  2,
+  4,
   [
     { item: WIZARD_HAT, probability: 0.25 },
     { item: BASIC_STAFF, probability: 0.15 },
@@ -216,12 +216,12 @@ export const OGRE = new MonsterType(
 export const MINOTAUR = new MonsterType(
   "Minotaur",
   require("@/assets/images/monsters/minotaur.png"),
-  15,
-  3,
-  1.5,
+  10,
+  2.5,
   2,
+  1.5,
   [
-    { item: MINOTAURS_MIGHT, probability: 0.25 },
+    { item: MINOTAURS_MIGHT, probability: 0.1 },
     { item: STAFF_OF_HEALTH, probability: 0.05 }
   ]
 );
@@ -231,7 +231,7 @@ export const CHIMERA = new MonsterType(
   require("@/assets/images/monsters/chimera.png"),
   30,
   5,
-  2,
+  3,
   2,
   [
     { item: FIRE_EYE_STAFF, probability: 0.1 },
