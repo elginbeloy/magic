@@ -35,8 +35,8 @@
     <div class="enemy-container" v-else-if="monster">
       <div
         class="info"
-        v-for="(info, index) of infos"
-        :key="`info-${index}-${info.xOffset}-${info.text}`"
+        v-for="info of infos"
+        :key="`info-${info.xOffset}-${info.text}`"
         :style="{
           color: info.colorHex,
           marginLeft: (info.xOffset || 0) + 'px'
@@ -315,7 +315,7 @@ export default class Home extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: infoPopup 2s ease-in-out;
+  animation: infoPopup 3s ease-in-out;
 }
 
 @keyframes infoPopup {
