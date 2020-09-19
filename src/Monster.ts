@@ -375,6 +375,20 @@ export const NECROMANCER = new MonsterType(
   ]
 );
 
+export const NICO_WOLF = new MonsterType(
+  "Nico Wolf",
+  require("@/assets/images/monsters/nico_wolf.png"),
+  1000,
+  10,
+  25,
+  1,
+  [
+    { item: STAFF_OF_HEALTH, probability: 0.15 },
+    { item: STAFF_OF_WEALTH, probability: 0.15 },
+    { item: WAND_OF_MAGIC, probability: 0.15 }
+  ]
+);
+
 export const getNextMonster = (
   level: number,
   store: any,

@@ -14,7 +14,8 @@ import {
   SNOW_MONSTER,
   PROTECTOR_OF_THE_SEA,
   KAPPA,
-  NECROMANCER
+  NECROMANCER,
+  NICO_WOLF
 } from "./Monster";
 
 export interface LocationMap {
@@ -32,7 +33,8 @@ export const MAPS: LocationMap[] = [
       { monster: ZOMBIE, probability: 0.3 },
       { monster: GOBLIN, probability: 0.15 },
       { monster: OGRE, probability: 0.1 },
-      { monster: MINOTAUR, probability: 0.05 }
+      { monster: MINOTAUR, probability: 0.05 },
+      { monster: NICO_WOLF, probability: 0.01 }
     ],
     imagePath: require("@/assets/images/mystical_forest.jpg"),
     magicIQRequired: 0
