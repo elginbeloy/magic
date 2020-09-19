@@ -214,9 +214,6 @@ export default class Home extends Vue {
   addInfoPopups(popups: InfoPopup[]) {
     // Assign random x offset.
     const xOffset = Math.random() * 500 - 250;
-    popups = popups.map((popup: InfoPopup) => {
-      return { ...popup, xOffset };
-    });
 
     for (let index = 0; index < popups.length; index++) {
       setTimeout(() => {
