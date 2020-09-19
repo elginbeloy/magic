@@ -24,7 +24,7 @@ export interface User {
   // Used to show the victory screen rewards.
   lastGoldReward?: number;
   lastExpReward?: number;
-  lastItemReward?: Item;
+  lastRewardItems: Item[];
 
   // Used to show the death / level up screens.
   dead: boolean;
@@ -106,5 +106,6 @@ export const BASE_USER: User = {
   reloadingSpells: [],
   reloadRemovalTimeouts: [],
   items: [],
+  lastRewardItems: [],
   equippedItems: {}
 };

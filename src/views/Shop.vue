@@ -44,9 +44,12 @@
       </div>
       <div
         class="item"
-        v-for="item of user.items.filter(item => !user.equippedItems[item.key])"
-        :key="item.key"
+        v-for="(item, index) of user.items"
+        :key="`item-${item.key}-${index}`"
         @click="select(item)"
+        :class="{
+          'item--active': selected && item.key === selected.key
+        }"
       >
         <img :src="item.imagePath" />
       </div>
@@ -59,25 +62,27 @@
         Regen Time: {{ selected.reloadTimeSeconds }}s
       </a>
       <a v-if="selectedIsSpell"> Mana Cost: {{ selected.manaCost }} </a>
-      <div
-        class="buy-button"
-        v-if="selectedIsSpell && !userHasSpell(selected.key)"
-        @click="buySpell"
-      >
-        {{ selected.cost }} <img src="../assets/images/shop.png" />
-      </div>
-      <div class="buy-button" v-else @click="equip">
-        {{
-          !!user.equippedSpells[selected.key] ||
-          !!user.equippedItems[selected.key]
-            ? "Unequip"
-            : "Equip"
-        }}
-        <img src="../assets/images/fight.png" />
-      </div>
-      <div v-if="!selectedIsSpell" class="sell-button" @click="sellItem">
-        Sell for {{ selected.sellValue }}
-        <img src="../assets/images/shop.png" />
+      <div class="information-container__buttons">
+        <div
+          class="buy-button"
+          v-if="selectedIsSpell && !userHasSpell(selected.key)"
+          @click="buySpell"
+        >
+          {{ selected.cost }} <img src="../assets/images/shop.png" />
+        </div>
+        <div class="buy-button" v-else @click="equip">
+          {{
+            !!user.equippedSpells[selected.key] ||
+            !!user.equippedItems[selected.key]
+              ? "Unequip"
+              : "Equip"
+          }}
+          <img src="../assets/images/fight.png" />
+        </div>
+        <div v-if="!selectedIsSpell" class="sell-button" @click="sellItem">
+          Sell for {{ selected.sellValue }}
+          <img src="../assets/images/shop.png" />
+        </div>
       </div>
     </div>
   </div>
@@ -197,6 +202,7 @@ export default class Shop extends Vue {
 .equipped-container {
   position: relative;
   width: 100%;
+  height: 140px;
   padding: 10px;
   margin-bottom: 20px;
 
@@ -207,7 +213,6 @@ export default class Shop extends Vue {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
 
   &__title {
     display: inline-block;
@@ -279,15 +284,16 @@ export default class Shop extends Vue {
   margin-top: auto;
   margin-right: auto;
   width: 680px;
-  height: 240px;
+  height: 280px;
   padding: 20px;
+  padding-bottom: 60px;
   margin: 10px;
 
   border-radius: 4px;
   box-shadow: 0 0 16px 4px #000000d0;
   border-radius: 8px;
-  background: #121212d0;
-  background: linear-gradient(to left, #121212a0, #121212e0);
+  background: #121212;
+  background: linear-gradient(to right, #121212d5, #121212);
 
   font-size: 16px;
   color: #fff;
@@ -310,13 +316,25 @@ export default class Shop extends Vue {
     height: 90%;
     opacity: 0.1;
   }
+
+  &__buttons {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 60px;
+    width: 100%;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+  }
 }
 
 .buy-button,
 .sell-button {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
+  position: relative;
   padding: 10px;
 
   font-size: 20px;
@@ -342,9 +360,5 @@ export default class Shop extends Vue {
     filter: drop-shadow(0 0 4px $primary-blue);
     transform: scale(1.1);
   }
-}
-
-.sell-button {
-  right: 150px;
 }
 </style>

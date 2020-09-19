@@ -36,6 +36,19 @@ export class Item {
   }
 }
 
+/* ====== Summoning Items ====== */
+
+export const SOUL_STONE = new Item(
+  "soul_stone",
+  "Soul Stone",
+  "It glows with life. Adds +1 magicIQ. Maybe does other stuff too.",
+  require("@/assets/images/items/soul_stone.png"),
+  10,
+  [{ statName: "magicIQ", amount: 1 }]
+);
+
+/* ============================= */
+
 export const WIZARD_HAT = new Item(
   "wizard_hat",
   "A Wizard's Hat",

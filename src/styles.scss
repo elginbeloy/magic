@@ -1,7 +1,7 @@
-$primary-blue: #226ce0;
+$primary-blue: #7840b3;
 $primary-red: #d7263d;
 
-@mixin progress-bar($width: 100%, $height: 25px, $color: #226ce0) {
+@mixin progress-bar($width: 100%, $height: 25px, $color: #7840b3) {
   position: relative;
   width: 100%;
   height: 25px;

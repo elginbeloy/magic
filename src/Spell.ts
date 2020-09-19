@@ -142,8 +142,8 @@ const magicAttack = new Spell({
   key: "magicAttack",
   name: "A Simple Attack Spell",
   desc:
-    "You found it on page 1. Does ~0.5x<span class='magic-word'>magicStrength</span> DMG.",
-  reloadTimeSeconds: 3.0,
+    "You found it on page 1. Does ~0.25x<span class='magic-word'>magicStrength</span> DMG.",
+  reloadTimeSeconds: 1.0,
   manaCost: 1.0,
   imagePath: require("@/assets/images/spells/magic_attack_1.png"),
   cost: 0
@@ -162,7 +162,7 @@ magicAttack.effect = (
 
   if (user.mana >= magicAttack.manaCost) {
     const damage = getAttackDamage(
-      0.5 * user.magicStrength,
+      0.25 * user.magicStrength,
       user.magicPrecision
     );
     store.commit("addMana", -magicAttack.manaCost);

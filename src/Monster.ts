@@ -9,6 +9,7 @@ import {
   FIRE_EYE_STAFF,
   MAGIC_STAFF,
   MINOTAURS_MIGHT,
+  SOUL_STONE,
   STAFF_OF_MANA,
   WAND_OF_WEALTH,
   STAFF_OF_WEALTH,
@@ -113,12 +114,7 @@ export const GHOST = new MonsterType(
   1,
   1,
   2,
-  [
-    { item: WIZARD_HAT, probability: 0.1 },
-    { item: BASIC_STAFF, probability: 0.05 },
-    { item: BASIC_WAND, probability: 0.05 },
-    { item: SPARK_WAND, probability: 0.025 }
-  ]
+  [{ item: WIZARD_HAT, probability: 0.05 }]
 );
 
 export const ZOMBIE = new MonsterType(
@@ -160,6 +156,7 @@ export const WIZARD_HUNTING_WARRIOR = new MonsterType(
   1.5,
   3,
   [
+    { item: SOUL_STONE, probability: 1.0 },
     { item: WIZARD_HAT, probability: 0.25 },
     { item: BASIC_STAFF, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.15 },
@@ -181,6 +178,7 @@ export const WIZARD_HUNTING_ARCHER = new MonsterType(
   1.5,
   2,
   [
+    { item: SOUL_STONE, probability: 1.0 },
     { item: WIZARD_HAT, probability: 0.25 },
     { item: BASIC_STAFF, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.15 },

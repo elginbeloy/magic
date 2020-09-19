@@ -75,6 +75,7 @@ export default new Vuex.Store({
       Vue.set(state.user, "lastExpReward", lastExpReward);
     },
     setLastRewardItems(state, items: Item[]) {
+      console.log(items);
       Vue.set(state.user, "lastRewardItems", items);
     },
     addHealth(state, health: number) {
@@ -189,23 +190,31 @@ export default new Vuex.Store({
       );
     },
     equipItemByKey(state, itemKey: string) {
-      const item: Item = state.user.items.find(
+      const itemIndex: number = state.user.items.findIndex(
         (item: Item) => item.key === itemKey
       );
       if (
-        item &&
+        state.user.items[itemIndex] &&
         Object.keys(state.user.equippedItems).length < state.user.inventorySize
       ) {
         Vue.set(state.user, "equippedItems", {
           ...state.user.equippedItems,
-          [itemKey]: item
+          [itemKey]: state.user.items[itemIndex]
         });
+
+        const updatedItems = [...state.user.items];
+        updatedItems.splice(itemIndex, 1);
+        Vue.set(state.user, "items", updatedItems);
       }
     },
     unequipItemByKey(state, itemKey: string) {
+      Vue.set(state.user, "items", [
+        ...state.user.items,
+        state.user.equippedItems[itemKey]
+      ]);
+
       const equippedItems = { ...state.user.equippedItems };
       delete equippedItems[itemKey];
-
       Vue.set(state.user, "equippedItems", equippedItems);
     },
     restart(state) {
@@ -236,7 +245,7 @@ export default new Vuex.Store({
             Math.random() * (1 / (context.state.user.luck / 5) ** 0.1);
           if (itemRoll <= item.probability) {
             context.commit("addItem", item.item);
-            rewardItems.push(item);
+            rewardItems.push(item.item);
           }
         }
 

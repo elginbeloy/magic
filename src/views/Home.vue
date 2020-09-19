@@ -71,9 +71,13 @@
         <a>exp</a>
         <a>+{{ user.lastExpReward }}</a>
       </div>
-      <div class="success-container__stat" v-if="user.lastItemReward">
-        <img :src="user.lastItemReward.imagePath" />
-        <a style="font-size: 18px">{{ user.lastItemReward.name }}</a>
+      <div
+        class="success-container__stat"
+        v-for="item of user.lastRewardItems"
+        :key="`reward-item-${item.key}`"
+      >
+        <img :src="item.imagePath" />
+        <a style="font-size: 18px">{{ item.name }}</a>
       </div>
       <div class="success-container__next" @click="getMonster()">
         <img src="../assets/images/fight.png" /> Onward!
@@ -281,14 +285,7 @@ export default class Home extends Vue {
   margin: 20px;
   transition: 0.1s linear all;
   cursor: pointer;
-
-  &:hover {
-    filter: drop-shadow(0px 0px 6px #226ce0a0);
-  }
-
-  &:active {
-    filter: drop-shadow(0px 0px 48px #d7263d);
-  }
+  filter: drop-shadow(0px 0px 12px $primary-blue);
 }
 
 .stats-container {
@@ -331,7 +328,7 @@ export default class Home extends Vue {
 }
 
 .health-indicator {
-  @include progress-bar($color: #d7263d);
+  @include progress-bar($color: $primary-red);
 }
 
 .spells-container {
@@ -419,7 +416,7 @@ export default class Home extends Vue {
   height: 80px;
   padding: 10px;
 
-  border: 1px solid #226ce0;
+  border: 1px solid $primary-blue;
   border-radius: 4px;
   cursor: pointer;
   transition: 0.3s linear all;
@@ -440,10 +437,9 @@ export default class Home extends Vue {
     color: $primary-blue;
   }
 
-  &--selected,
   &:hover {
-    box-shadow: 0 0 12px 4px #226ce0a0;
-    transform: scale(1.025);
+    box-shadow: 0 0 12px 4px $primary-blue;
+    transform: scale(1.05);
   }
 
   img {
@@ -454,7 +450,6 @@ export default class Home extends Vue {
     transition: 0.3s linear all;
   }
 
-  &--selected img,
   &:hover img {
     filter: none;
   }
