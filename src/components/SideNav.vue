@@ -31,7 +31,7 @@
         <div>
           <a> {{ user[stat] }} </a>
           <button @click="addStat(stat)" v-if="user.statPoints > 0">
-            +<sup v-if="stat == 'HP'">(+5)</sup>
+            +<sup v-if="stat == 'HP'">5</sup>
           </button>
         </div>
       </div>
@@ -142,6 +142,11 @@ export default class SideNav extends Vue {
     font-size: 16px;
     font-weight: bold;
     color: #fff;
+  }
+
+  sup {
+    font-size: 10px;
+    margin-left: 5px;
   }
 
   button:active {

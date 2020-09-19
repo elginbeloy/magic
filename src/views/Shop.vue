@@ -239,7 +239,7 @@ export default class Shop extends Vue {
   background: #212121a0;
   border-radius: 4px;
   cursor: pointer;
-  transition: 0.3s linear all;
+  transition: 3s ease-out all;
 
   display: flex;
   justify-content: center;
@@ -249,12 +249,8 @@ export default class Shop extends Vue {
   &--active,
   &:hover {
     border: 1px solid $primary-blue;
-  }
-
-  &--equipped,
-  &--active,
-  &:hover {
-    box-shadow: 0 0 18px 4px rgba($primary-blue, 0.75);
+    box-shadow: 0 0 24px 8px rgba($primary-blue, 0.9);
+    transition: 0.2s linear all;
   }
 
   &--active,
