@@ -1,25 +1,6 @@
 import { InfoPopup } from "./Spell";
 import { LocationMap } from "./LocationMap";
-import {
-  Item,
-  BASIC_WIZARD_HAT,
-  BASIC_STAFF,
-  BASIC_WAND,
-  APPRENTICE_WAND,
-  NATURE_WAND,
-  THE_OPAL_ROD,
-  FIRE_EYE_STAFF,
-  SPARK_WAND,
-  MAGIC_STAFF,
-  MINOTAURS_MIGHT,
-  GHOST_STONE,
-  SOUL_STONE,
-  STAFF_OF_MANA,
-  WAND_OF_WEALTH,
-  STAFF_OF_WEALTH,
-  STAFF_OF_HEALTH,
-  WAND_OF_MAGIC
-} from "./Item";
+import * as Item from "./Item";
 
 const getMonsterAttackDamage = (baseDamage: number): number => {
   return Math.round(0.8 * baseDamage + Math.random() * (0.4 * baseDamage));
@@ -36,7 +17,7 @@ export interface Monster {
   effectIntervals: number[];
   level: number;
   imagePath: string;
-  itemOptions: { item: Item; probability: number }[];
+  itemOptions: { item: Item.Item; probability: number }[];
 }
 
 const attack = (
@@ -59,7 +40,7 @@ export class MonsterType {
   strength: number;
   attackIntervalSeconds: number;
   rewardMultiplier: number;
-  itemOptions: { item: Item; probability: number }[];
+  itemOptions: { item: Item.Item; probability: number }[];
 
   constructor(
     name: string,
@@ -68,7 +49,7 @@ export class MonsterType {
     strength: number,
     rewardMultiplier: number,
     attackIntervalSeconds: number,
-    itemOptions: { item: Item; probability: number }[]
+    itemOptions: { item: Item.Item; probability: number }[]
   ) {
     this.name = name;
     this.imagePath = imagePath;
@@ -118,8 +99,8 @@ export const GHOST = new MonsterType(
   1,
   2,
   [
-    { item: GHOST_STONE, probability: 1.0 },
-    { item: BASIC_WIZARD_HAT, probability: 0.05 }
+    { item: Item.GHOST_STONE, probability: 1.0 },
+    { item: Item.BASIC_WIZARD_HAT, probability: 0.05 }
   ]
 );
 
@@ -131,10 +112,11 @@ export const ZOMBIE = new MonsterType(
   1.1,
   2,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.08 },
-    { item: BASIC_WAND, probability: 0.06 },
-    { item: BASIC_STAFF, probability: 0.05 },
-    { item: APPRENTICE_WAND, probability: 0.04 }
+    { item: Item.BASIC_WIZARD_HAT, probability: 0.08 },
+    { item: Item.BASIC_STAFF, probability: 0.06 },
+    { item: Item.BASIC_WAND, probability: 0.05 },
+    { item: Item.APPRENTICE_WAND, probability: 0.04 },
+    { item: Item.NATURE_WAND, probability: 0.04 }
   ]
 );
 
@@ -146,12 +128,12 @@ export const GOBLIN = new MonsterType(
   1.2,
   2,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.09 },
-    { item: BASIC_WAND, probability: 0.07 },
-    { item: BASIC_STAFF, probability: 0.06 },
-    { item: APPRENTICE_WAND, probability: 0.05 },
-    { item: NATURE_WAND, probability: 0.03 },
-    { item: THE_OPAL_ROD, probability: 0.03 }
+    { item: Item.BASIC_WIZARD_HAT, probability: 0.09 },
+    { item: Item.BASIC_STAFF, probability: 0.07 },
+    { item: Item.BASIC_WAND, probability: 0.06 },
+    { item: Item.APPRENTICE_WAND, probability: 0.05 },
+    { item: Item.NATURE_WAND, probability: 0.05 },
+    { item: Item.THE_OPAL_ROD, probability: 0.03 }
   ]
 );
 
@@ -163,15 +145,16 @@ export const WIZARD_HUNTING_WARRIOR = new MonsterType(
   1.5,
   2.25,
   [
-    { item: SOUL_STONE, probability: 0.5 },
-    { item: BASIC_WIZARD_HAT, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.08 },
-    { item: BASIC_STAFF, probability: 0.08 },
-    { item: APPRENTICE_WAND, probability: 0.07 },
-    { item: NATURE_WAND, probability: 0.06 },
-    { item: THE_OPAL_ROD, probability: 0.05 },
-    { item: FIRE_EYE_STAFF, probability: 0.01 },
-    { item: SPARK_WAND, probability: 0.01 }
+    { item: Item.SOUL_STONE, probability: 1.0 },
+    { item: Item.BASIC_WIZARD_HAT, probability: 0.15 },
+    { item: Item.BASIC_STAFF, probability: 0.1 },
+    { item: Item.BASIC_WAND, probability: 0.09 },
+    { item: Item.APPRENTICE_WAND, probability: 0.08 },
+    { item: Item.NATURE_WAND, probability: 0.08 },
+    { item: Item.THE_OPAL_ROD, probability: 0.06 },
+    { item: Item.DARK_SPELL_BOOK, probability: 0.04 },
+    { item: Item.FIRE_EYE_STAFF, probability: 0.04 },
+    { item: Item.SPARK_WAND, probability: 0.02 }
   ]
 );
 
@@ -183,17 +166,16 @@ export const WIZARD_HUNTING_ARCHER = new MonsterType(
   1.5,
   1.75,
   [
-    { item: SOUL_STONE, probability: 0.5 },
-    { item: BASIC_WIZARD_HAT, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.08 },
-    { item: BASIC_STAFF, probability: 0.08 },
-    { item: APPRENTICE_WAND, probability: 0.07 },
-    { item: NATURE_WAND, probability: 0.06 },
-    { item: THE_OPAL_ROD, probability: 0.05 },
-    { item: FIRE_EYE_STAFF, probability: 0.01 },
-    { item: SPARK_WAND, probability: 0.01 },
-    { item: FIRE_EYE_STAFF, probability: 0.01 },
-    { item: SPARK_WAND, probability: 0.01 }
+    { item: Item.SOUL_STONE, probability: 1.0 },
+    { item: Item.BASIC_WIZARD_HAT, probability: 0.15 },
+    { item: Item.BASIC_STAFF, probability: 0.1 },
+    { item: Item.BASIC_WAND, probability: 0.09 },
+    { item: Item.APPRENTICE_WAND, probability: 0.08 },
+    { item: Item.NATURE_WAND, probability: 0.08 },
+    { item: Item.THE_OPAL_ROD, probability: 0.06 },
+    { item: Item.DARK_SPELL_BOOK, probability: 0.04 },
+    { item: Item.FIRE_EYE_STAFF, probability: 0.04 },
+    { item: Item.SPARK_WAND, probability: 0.02 }
   ]
 );
 
@@ -205,17 +187,13 @@ export const MECI_WOLF = new MonsterType(
   2,
   1.5,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.08 },
-    { item: BASIC_STAFF, probability: 0.08 },
-    { item: APPRENTICE_WAND, probability: 0.07 },
-    { item: NATURE_WAND, probability: 0.06 },
-    { item: THE_OPAL_ROD, probability: 0.05 },
-    { item: FIRE_EYE_STAFF, probability: 0.01 },
-    { item: SPARK_WAND, probability: 0.01 },
-    { item: FIRE_EYE_STAFF, probability: 0.01 },
-    { item: SPARK_WAND, probability: 0.01 },
-    { item: MAGIC_STAFF, probability: 0.01 }
+    { item: Item.APPRENTICE_WAND, probability: 0.12 },
+    { item: Item.NATURE_WAND, probability: 0.12 },
+    { item: Item.THE_OPAL_ROD, probability: 0.08 },
+    { item: Item.DARK_SPELL_BOOK, probability: 0.06 },
+    { item: Item.FIRE_EYE_STAFF, probability: 0.06 },
+    { item: Item.SPARK_WAND, probability: 0.04 },
+    { item: Item.STAFF_OF_HEALTH, probability: 0.01 }
   ]
 );
 
@@ -227,21 +205,15 @@ export const OGRE = new MonsterType(
   2,
   4,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.08 },
-    { item: BASIC_STAFF, probability: 0.08 },
-    { item: APPRENTICE_WAND, probability: 0.07 },
-    { item: NATURE_WAND, probability: 0.06 },
-    { item: THE_OPAL_ROD, probability: 0.05 },
-    { item: FIRE_EYE_STAFF, probability: 0.01 },
-    { item: SPARK_WAND, probability: 0.01 },
-    { item: FIRE_EYE_STAFF, probability: 0.01 },
-    { item: SPARK_WAND, probability: 0.01 },
-    { item: MAGIC_STAFF, probability: 0.01 },
-    { item: STAFF_OF_MANA, probability: 0.01 },
-    { item: STAFF_OF_HEALTH, probability: 0.01 },
-    { item: STAFF_OF_WEALTH, probability: 0.01 },
-    { item: WAND_OF_WEALTH, probability: 0.01 }
+    { item: Item.APPRENTICE_WAND, probability: 0.12 },
+    { item: Item.NATURE_WAND, probability: 0.12 },
+    { item: Item.THE_OPAL_ROD, probability: 0.08 },
+    { item: Item.DARK_SPELL_BOOK, probability: 0.06 },
+    { item: Item.FIRE_EYE_STAFF, probability: 0.06 },
+    { item: Item.SPARK_WAND, probability: 0.04 },
+    { item: Item.STAFF_OF_HEALTH, probability: 0.01 },
+    { item: Item.MANA_HAT, probability: 0.01 },
+    { item: Item.MAGIC_STAFF, probability: 0.01 }
   ]
 );
 
@@ -253,8 +225,10 @@ export const MINOTAUR = new MonsterType(
   2,
   1.5,
   [
-    { item: MINOTAURS_MIGHT, probability: 0.1 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 }
+    { item: Item.MINOTAURS_MIGHT, probability: 0.15 },
+    { item: Item.APPRENTICE_WAND, probability: 0.12 },
+    { item: Item.NATURE_WAND, probability: 0.12 },
+    { item: Item.THE_OPAL_ROD, probability: 0.08 }
   ]
 );
 
@@ -266,13 +240,13 @@ export const CHIMERA = new MonsterType(
   3,
   2,
   [
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_MAGIC, probability: 0.01 }
+    { item: Item.THE_OPAL_ROD, probability: 0.15 },
+    { item: Item.DARK_SPELL_BOOK, probability: 0.08 },
+    { item: Item.FIRE_EYE_STAFF, probability: 0.08 },
+    { item: Item.SPARK_WAND, probability: 0.08 },
+    { item: Item.STAFF_OF_HEALTH, probability: 0.04 },
+    { item: Item.MANA_HAT, probability: 0.04 },
+    { item: Item.MAGIC_STAFF, probability: 0.03 }
   ]
 );
 
@@ -284,12 +258,13 @@ export const PROTECTOR_OF_THE_SEA = new MonsterType(
   1.5,
   1,
   [
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_MAGIC, probability: 0.01 }
+    { item: Item.SPARK_WAND, probability: 0.08 },
+    { item: Item.STAFF_OF_HEALTH, probability: 0.06 },
+    { item: Item.MANA_HAT, probability: 0.06 },
+    { item: Item.MAGIC_STAFF, probability: 0.04 },
+    { item: Item.MAGIC_SCROLL, probability: 0.02 },
+    { item: Item.STAFF_OF_MANA, probability: 0.02 },
+    { item: Item.WAND_OF_WEALTH, probability: 0.01 }
   ]
 );
 
@@ -301,13 +276,13 @@ export const KAPPA = new MonsterType(
   1.6,
   2,
   [
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_MAGIC, probability: 0.01 }
+    { item: Item.SPARK_WAND, probability: 0.08 },
+    { item: Item.STAFF_OF_HEALTH, probability: 0.06 },
+    { item: Item.MANA_HAT, probability: 0.06 },
+    { item: Item.MAGIC_STAFF, probability: 0.04 },
+    { item: Item.MAGIC_SCROLL, probability: 0.02 },
+    { item: Item.STAFF_OF_MANA, probability: 0.02 },
+    { item: Item.WAND_OF_WEALTH, probability: 0.01 }
   ]
 );
 
@@ -319,13 +294,13 @@ export const KRAKEN = new MonsterType(
   1.75,
   4,
   [
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_MAGIC, probability: 0.01 }
+    { item: Item.SPARK_WAND, probability: 0.08 },
+    { item: Item.STAFF_OF_HEALTH, probability: 0.06 },
+    { item: Item.MANA_HAT, probability: 0.06 },
+    { item: Item.MAGIC_STAFF, probability: 0.04 },
+    { item: Item.MAGIC_SCROLL, probability: 0.02 },
+    { item: Item.STAFF_OF_MANA, probability: 0.02 },
+    { item: Item.WAND_OF_WEALTH, probability: 0.01 }
   ]
 );
 
@@ -337,13 +312,13 @@ export const SNOW_MONSTER = new MonsterType(
   2,
   2,
   [
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_MAGIC, probability: 0.01 }
+    { item: Item.SPARK_WAND, probability: 0.08 },
+    { item: Item.STAFF_OF_HEALTH, probability: 0.06 },
+    { item: Item.MANA_HAT, probability: 0.06 },
+    { item: Item.MAGIC_STAFF, probability: 0.04 },
+    { item: Item.MAGIC_SCROLL, probability: 0.02 },
+    { item: Item.STAFF_OF_MANA, probability: 0.02 },
+    { item: Item.WAND_OF_WEALTH, probability: 0.01 }
   ]
 );
 
@@ -355,13 +330,13 @@ export const SHADOW_MONSTER = new MonsterType(
   5,
   0.25,
   [
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_MAGIC, probability: 0.01 }
+    { item: Item.MANA_HAT, probability: 0.1 },
+    { item: Item.MAGIC_STAFF, probability: 0.9 },
+    { item: Item.MAGIC_SCROLL, probability: 0.08 },
+    { item: Item.STAFF_OF_MANA, probability: 0.08 },
+    { item: Item.WAND_OF_WEALTH, probability: 0.05 },
+    { item: Item.STAFF_OF_WEALTH, probability: 0.03 },
+    { item: Item.DARK_SPELL_BOOK_2, probability: 0.02 }
   ]
 );
 
@@ -373,16 +348,13 @@ export const HOSTILE_WIZARD = new MonsterType(
   3.5,
   2,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.25 },
-    { item: BASIC_STAFF, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.15 },
-    { item: SPARK_WAND, probability: 0.15 },
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_MAGIC, probability: 0.05 }
+    { item: Item.MANA_HAT, probability: 0.1 },
+    { item: Item.MAGIC_STAFF, probability: 0.9 },
+    { item: Item.MAGIC_SCROLL, probability: 0.08 },
+    { item: Item.STAFF_OF_MANA, probability: 0.08 },
+    { item: Item.WAND_OF_WEALTH, probability: 0.05 },
+    { item: Item.STAFF_OF_WEALTH, probability: 0.03 },
+    { item: Item.DARK_SPELL_BOOK_2, probability: 0.02 }
   ]
 );
 
@@ -394,16 +366,13 @@ export const NECROMANCER = new MonsterType(
   5,
   5,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.25 },
-    { item: BASIC_STAFF, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.15 },
-    { item: SPARK_WAND, probability: 0.15 },
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_MAGIC, probability: 0.05 }
+    { item: Item.MANA_HAT, probability: 0.1 },
+    { item: Item.MAGIC_STAFF, probability: 0.9 },
+    { item: Item.MAGIC_SCROLL, probability: 0.08 },
+    { item: Item.STAFF_OF_MANA, probability: 0.08 },
+    { item: Item.WAND_OF_WEALTH, probability: 0.05 },
+    { item: Item.STAFF_OF_WEALTH, probability: 0.03 },
+    { item: Item.DARK_SPELL_BOOK_2, probability: 0.02 }
   ]
 );
 
@@ -414,11 +383,7 @@ export const NICO_WOLF = new MonsterType(
   10,
   25,
   1,
-  [
-    { item: STAFF_OF_HEALTH, probability: 0.15 },
-    { item: STAFF_OF_WEALTH, probability: 0.15 },
-    { item: WAND_OF_MAGIC, probability: 0.15 }
-  ]
+  [{ item: Item.WAND_OF_MAGIC, probability: 1.0 }]
 );
 
 export const getNextMonster = (

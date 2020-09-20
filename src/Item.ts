@@ -94,7 +94,10 @@ export const APPRENTICE_WAND = new Item(
   "Used to train future Wizards. +10 MP, +10 magicPrecision.",
   require("@/assets/images/items/apprentice_wand.png"),
   200,
-  [{ statName: "MP", amount: 10 }]
+  [
+    { statName: "MP", amount: 10 },
+    { statName: "magicPrecision", amount: 10 }
+  ]
 );
 
 export const NATURE_WAND = new Item(
@@ -119,6 +122,19 @@ export const THE_OPAL_ROD = new Item(
     { statName: "magicPrecision", amount: 9 },
     { statName: "magicIQ", amount: 6 },
     { statName: "magicStrength", amount: 3 }
+  ]
+);
+
+export const DARK_SPELL_BOOK = new Item(
+  "dark_spell_book",
+  "Dark Spell Book",
+  "Spooky. +6 magicStrength, +6 MP, +6 magicIQ",
+  require("@/assets/images/items/dark_spell_book.png"),
+  270,
+  [
+    { statName: "magicStrength", amount: 6 },
+    { statName: "MP", amount: 6 },
+    { statName: "magicIQ", amount: 6 }
   ]
 );
 
@@ -159,10 +175,7 @@ export const MANA_HAT = new Item(
   "Put it on, get some mana. +25 MP",
   require("@/assets/images/items/mana_hat.png"),
   375,
-  [
-    { statName: "HP", amount: 25 },
-    { statName: "magicPrecision", amount: 25 }
-  ]
+  [{ statName: "MP", amount: 25 }]
 );
 
 export const MAGIC_STAFF = new Item(
@@ -190,6 +203,18 @@ export const MINOTAURS_MIGHT = new Item(
   ]
 );
 
+export const MAGIC_SCROLL = new Item(
+  "magic_scroll",
+  "Magic Scroll",
+  "An ancient Magic Scroll container lots of spells. +25 magicStrength, +25 magicIQ.",
+  require("@/assets/images/items/magic_scroll.png"),
+  750,
+  [
+    { statName: "magicStrength", amount: 25 },
+    { statName: "magicIQ", amount: 25 }
+  ]
+);
+
 export const STAFF_OF_MANA = new Item(
   "staff_of_mana",
   "Staff of Mana",
@@ -202,7 +227,7 @@ export const STAFF_OF_MANA = new Item(
 export const WAND_OF_WEALTH = new Item(
   "wand_of_wealth",
   "Wand of Wealth",
-  "You're going to be rich! +50 luck!",
+  "You're going to be rich! +50 luck.",
   require("@/assets/images/items/wand_of_wealth.png"),
   1000,
   [{ statName: "luck", amount: 50 }]
@@ -211,18 +236,31 @@ export const WAND_OF_WEALTH = new Item(
 export const STAFF_OF_WEALTH = new Item(
   "staff_of_wealth",
   "Staff of Wealth",
-  "You're going to be super rich! +75 luck!",
+  "You're going to be super, super rich! +75 luck!",
   require("@/assets/images/items/staff_of_wealth.png"),
   1500,
-  [{ statName: "luck", amount: 50 }]
+  [{ statName: "luck", amount: 75 }]
+);
+
+export const DARK_SPELL_BOOK_2 = new Item(
+  "dark_spell_book_2",
+  "Dark Spell Book II",
+  "Extra Spooky. +66 magicIQ. +66 MP. +66 magicPrecision",
+  require("@/assets/images/items/dark_spell_book_2.png"),
+  1800,
+  [
+    { statName: "magicIQ", amount: 66 },
+    { statName: "MP", amount: 66 },
+    { statName: "magicPrecision", amount: 66 }
+  ]
 );
 
 export const WAND_OF_MAGIC = new Item(
   "wand_of_magic",
   "Wand of Magic",
-  "It caries the magic. +66 MP, +66 magicPrecision, +6 magicStrength.",
+  "It caries the magic. +666 MP, +666 magicPrecision, +666 magicStrength.",
   require("@/assets/images/items/wand_of_magic.png"),
-  50000,
+  100000,
   [
     { statName: "MP", amount: 66 },
     { statName: "magicStrength", amount: 6 },
