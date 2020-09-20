@@ -131,9 +131,10 @@ export const ZOMBIE = new MonsterType(
   1.1,
   2,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.05 },
-    { item: BASIC_WAND, probability: 0.05 },
-    { item: SPARK_WAND, probability: 0.05 }
+    { item: BASIC_WIZARD_HAT, probability: 0.08 },
+    { item: BASIC_WAND, probability: 0.06 },
+    { item: BASIC_STAFF, probability: 0.05 },
+    { item: APPRENTICE_WAND, probability: 0.04 }
   ]
 );
 
@@ -145,12 +146,12 @@ export const GOBLIN = new MonsterType(
   1.2,
   2,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.15 },
-    { item: BASIC_STAFF, probability: 0.1 },
-    { item: BASIC_WAND, probability: 0.1 },
-    { item: SPARK_WAND, probability: 0.1 },
-    { item: FIRE_EYE_STAFF, probability: 0.05 },
-    { item: MAGIC_STAFF, probability: 0.05 }
+    { item: BASIC_WIZARD_HAT, probability: 0.09 },
+    { item: BASIC_WAND, probability: 0.07 },
+    { item: BASIC_STAFF, probability: 0.06 },
+    { item: APPRENTICE_WAND, probability: 0.05 },
+    { item: NATURE_WAND, probability: 0.04 },
+    { item: THE_OPAL_ROD, probability: 0.04 }
   ]
 );
 
@@ -162,11 +163,12 @@ export const WIZARD_HUNTING_WARRIOR = new MonsterType(
   1.5,
   2.25,
   [
-    { item: SOUL_STONE, probability: 1.0 },
-    { item: BASIC_WIZARD_HAT, probability: 0.2 },
-    { item: BASIC_STAFF, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.15 },
-    { item: SPARK_WAND, probability: 0.15 },
+    { item: BASIC_WIZARD_HAT, probability: 0.09 },
+    { item: BASIC_WAND, probability: 0.07 },
+    { item: BASIC_STAFF, probability: 0.06 },
+    { item: APPRENTICE_WAND, probability: 0.05 },
+    { item: NATURE_WAND, probability: 0.04 },
+    { item: THE_OPAL_ROD, probability: 0.04 },
     { item: FIRE_EYE_STAFF, probability: 0.1 },
     { item: MAGIC_STAFF, probability: 0.1 },
     { item: STAFF_OF_MANA, probability: 0.05 },
