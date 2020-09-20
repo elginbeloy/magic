@@ -153,6 +153,18 @@ export const STAFF_OF_HEALTH = new Item(
   [{ statName: "HP", amount: 100 }]
 );
 
+export const MANA_HAT = new Item(
+  "mana_hat",
+  "Mana Hat",
+  "Put it on, get some mana. +25 MP",
+  require("@/assets/images/items/mana_hat.png"),
+  375,
+  [
+    { statName: "HP", amount: 25 },
+    { statName: "magicPrecision", amount: 25 }
+  ]
+);
+
 export const MAGIC_STAFF = new Item(
   "magic_staff",
   "Magic Staff",
