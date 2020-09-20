@@ -101,7 +101,7 @@ export const NATURE_WAND = new Item(
   "nature_wand",
   "Nature Wand",
   "Tree's root reach out to touch you. +25 HP, +25 magicPrecision.",
-  require("@/assets/images/items/apprentice_wand.png"),
+  require("@/assets/images/items/nature_wand.png"),
   200,
   [
     { statName: "HP", amount: 25 },
