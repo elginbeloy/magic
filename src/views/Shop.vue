@@ -145,7 +145,11 @@ export default class Shop extends Vue {
       } else {
         this.$store.commit("equipSpellByKey", this.selected.key);
       }
-    } else if (this.selected && this.selected instanceof Item) {
+    } else if (
+      this.selected &&
+      this.selected instanceof Item &&
+      Object.keys(this.user.equippedItems).length < this.user.inventorySize
+    ) {
       if (this.user.equippedItems[this.selected.key]) {
         this.$store.commit("unequipItemByKey", this.selected.key);
         this.selected.unequip(this.$store);

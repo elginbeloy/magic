@@ -2,11 +2,14 @@ import { InfoPopup } from "./Spell";
 import { LocationMap } from "./LocationMap";
 import {
   Item,
-  WIZARD_HAT,
+  BASIC_WIZARD_HAT,
   BASIC_STAFF,
   BASIC_WAND,
-  SPARK_WAND,
+  APPRENTICE_WAND,
+  NATURE_WAND,
+  THE_OPAL_ROD,
   FIRE_EYE_STAFF,
+  SPARK_WAND,
   MAGIC_STAFF,
   MINOTAURS_MIGHT,
   GHOST_STONE,
@@ -116,7 +119,7 @@ export const GHOST = new MonsterType(
   2,
   [
     { item: GHOST_STONE, probability: 1.0 },
-    { item: WIZARD_HAT, probability: 0.05 }
+    { item: BASIC_WIZARD_HAT, probability: 0.05 }
   ]
 );
 
@@ -128,7 +131,7 @@ export const ZOMBIE = new MonsterType(
   1.1,
   2,
   [
-    { item: WIZARD_HAT, probability: 0.15 },
+    { item: BASIC_WIZARD_HAT, probability: 0.05 },
     { item: BASIC_WAND, probability: 0.05 },
     { item: SPARK_WAND, probability: 0.05 }
   ]
@@ -142,7 +145,7 @@ export const GOBLIN = new MonsterType(
   1.2,
   2,
   [
-    { item: WIZARD_HAT, probability: 0.15 },
+    { item: BASIC_WIZARD_HAT, probability: 0.15 },
     { item: BASIC_STAFF, probability: 0.1 },
     { item: BASIC_WAND, probability: 0.1 },
     { item: SPARK_WAND, probability: 0.1 },
@@ -160,7 +163,7 @@ export const WIZARD_HUNTING_WARRIOR = new MonsterType(
   2.25,
   [
     { item: SOUL_STONE, probability: 1.0 },
-    { item: WIZARD_HAT, probability: 0.2 },
+    { item: BASIC_WIZARD_HAT, probability: 0.2 },
     { item: BASIC_STAFF, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.15 },
     { item: SPARK_WAND, probability: 0.15 },
@@ -182,7 +185,7 @@ export const WIZARD_HUNTING_ARCHER = new MonsterType(
   1.75,
   [
     { item: SOUL_STONE, probability: 1.0 },
-    { item: WIZARD_HAT, probability: 0.2 },
+    { item: BASIC_WIZARD_HAT, probability: 0.2 },
     { item: BASIC_STAFF, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.15 },
     { item: SPARK_WAND, probability: 0.15 },
@@ -218,7 +221,7 @@ export const OGRE = new MonsterType(
   2,
   4,
   [
-    { item: WIZARD_HAT, probability: 0.25 },
+    { item: BASIC_WIZARD_HAT, probability: 0.25 },
     { item: BASIC_STAFF, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.15 },
     { item: SPARK_WAND, probability: 0.15 },
@@ -359,7 +362,7 @@ export const HOSTILE_WIZARD = new MonsterType(
   3.5,
   2,
   [
-    { item: WIZARD_HAT, probability: 0.25 },
+    { item: BASIC_WIZARD_HAT, probability: 0.25 },
     { item: BASIC_STAFF, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.15 },
     { item: SPARK_WAND, probability: 0.15 },
@@ -380,7 +383,7 @@ export const NECROMANCER = new MonsterType(
   5,
   5,
   [
-    { item: WIZARD_HAT, probability: 0.25 },
+    { item: BASIC_WIZARD_HAT, probability: 0.25 },
     { item: BASIC_STAFF, probability: 0.15 },
     { item: BASIC_WAND, probability: 0.15 },
     { item: SPARK_WAND, probability: 0.15 },
