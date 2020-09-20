@@ -150,8 +150,8 @@ export const GOBLIN = new MonsterType(
     { item: BASIC_WAND, probability: 0.07 },
     { item: BASIC_STAFF, probability: 0.06 },
     { item: APPRENTICE_WAND, probability: 0.05 },
-    { item: NATURE_WAND, probability: 0.04 },
-    { item: THE_OPAL_ROD, probability: 0.04 }
+    { item: NATURE_WAND, probability: 0.03 },
+    { item: THE_OPAL_ROD, probability: 0.03 }
   ]
 );
 
@@ -163,18 +163,15 @@ export const WIZARD_HUNTING_WARRIOR = new MonsterType(
   1.5,
   2.25,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.09 },
-    { item: BASIC_WAND, probability: 0.07 },
-    { item: BASIC_STAFF, probability: 0.06 },
-    { item: APPRENTICE_WAND, probability: 0.05 },
-    { item: NATURE_WAND, probability: 0.04 },
-    { item: THE_OPAL_ROD, probability: 0.04 },
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_WEALTH, probability: 0.05 }
+    { item: SOUL_STONE, probability: 0.5 },
+    { item: BASIC_WIZARD_HAT, probability: 0.15 },
+    { item: BASIC_WAND, probability: 0.08 },
+    { item: BASIC_STAFF, probability: 0.08 },
+    { item: APPRENTICE_WAND, probability: 0.07 },
+    { item: NATURE_WAND, probability: 0.06 },
+    { item: THE_OPAL_ROD, probability: 0.05 },
+    { item: FIRE_EYE_STAFF, probability: 0.01 },
+    { item: SPARK_WAND, probability: 0.01 }
   ]
 );
 
@@ -186,32 +183,39 @@ export const WIZARD_HUNTING_ARCHER = new MonsterType(
   1.5,
   1.75,
   [
-    { item: SOUL_STONE, probability: 1.0 },
-    { item: BASIC_WIZARD_HAT, probability: 0.2 },
-    { item: BASIC_STAFF, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.15 },
-    { item: SPARK_WAND, probability: 0.15 },
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_WEALTH, probability: 0.05 }
+    { item: SOUL_STONE, probability: 0.5 },
+    { item: BASIC_WIZARD_HAT, probability: 0.15 },
+    { item: BASIC_WAND, probability: 0.08 },
+    { item: BASIC_STAFF, probability: 0.08 },
+    { item: APPRENTICE_WAND, probability: 0.07 },
+    { item: NATURE_WAND, probability: 0.06 },
+    { item: THE_OPAL_ROD, probability: 0.05 },
+    { item: FIRE_EYE_STAFF, probability: 0.01 },
+    { item: SPARK_WAND, probability: 0.01 },
+    { item: FIRE_EYE_STAFF, probability: 0.01 },
+    { item: SPARK_WAND, probability: 0.01 }
   ]
 );
 
 export const MECI_WOLF = new MonsterType(
   "Meci Wolf",
   require("@/assets/images/monsters/meci_wolf.png"),
-  25,
+  50,
   1.5,
   2,
   1.5,
   [
-    { item: BASIC_STAFF, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.15 },
-    { item: SPARK_WAND, probability: 0.15 },
-    { item: FIRE_EYE_STAFF, probability: 0.1 }
+    { item: BASIC_WIZARD_HAT, probability: 0.15 },
+    { item: BASIC_WAND, probability: 0.08 },
+    { item: BASIC_STAFF, probability: 0.08 },
+    { item: APPRENTICE_WAND, probability: 0.07 },
+    { item: NATURE_WAND, probability: 0.06 },
+    { item: THE_OPAL_ROD, probability: 0.05 },
+    { item: FIRE_EYE_STAFF, probability: 0.01 },
+    { item: SPARK_WAND, probability: 0.01 },
+    { item: FIRE_EYE_STAFF, probability: 0.01 },
+    { item: SPARK_WAND, probability: 0.01 },
+    { item: MAGIC_STAFF, probability: 0.01 }
   ]
 );
 
@@ -223,16 +227,21 @@ export const OGRE = new MonsterType(
   2,
   4,
   [
-    { item: BASIC_WIZARD_HAT, probability: 0.25 },
-    { item: BASIC_STAFF, probability: 0.15 },
-    { item: BASIC_WAND, probability: 0.15 },
-    { item: SPARK_WAND, probability: 0.15 },
-    { item: FIRE_EYE_STAFF, probability: 0.1 },
-    { item: MAGIC_STAFF, probability: 0.1 },
-    { item: STAFF_OF_MANA, probability: 0.05 },
-    { item: STAFF_OF_HEALTH, probability: 0.05 },
-    { item: STAFF_OF_WEALTH, probability: 0.05 },
-    { item: WAND_OF_WEALTH, probability: 0.05 }
+    { item: BASIC_WIZARD_HAT, probability: 0.15 },
+    { item: BASIC_WAND, probability: 0.08 },
+    { item: BASIC_STAFF, probability: 0.08 },
+    { item: APPRENTICE_WAND, probability: 0.07 },
+    { item: NATURE_WAND, probability: 0.06 },
+    { item: THE_OPAL_ROD, probability: 0.05 },
+    { item: FIRE_EYE_STAFF, probability: 0.01 },
+    { item: SPARK_WAND, probability: 0.01 },
+    { item: FIRE_EYE_STAFF, probability: 0.01 },
+    { item: SPARK_WAND, probability: 0.01 },
+    { item: MAGIC_STAFF, probability: 0.01 },
+    { item: STAFF_OF_MANA, probability: 0.01 },
+    { item: STAFF_OF_HEALTH, probability: 0.01 },
+    { item: STAFF_OF_WEALTH, probability: 0.01 },
+    { item: WAND_OF_WEALTH, probability: 0.01 }
   ]
 );
 
