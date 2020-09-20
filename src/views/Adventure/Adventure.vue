@@ -184,7 +184,18 @@ export default class Adventure extends Vue {
         this.addInfoPopups,
         this.addOuch
       );
+
+      // Reset all spells to unloaded.
       this.$store.commit("setMonster", monster);
+      for (const spellKey of Object.keys(this.user.equippedSpells)) {
+        this.$store.commit("addReloadingSpell", spellKey);
+        this.$store.commit(
+          "addReloadRemovalTimeout",
+          setTimeout(() => {
+            this.$store.commit("removeReloadingSpell", spellKey);
+          }, this.user.equippedSpells[spellKey].reloadTimeSeconds * 1000)
+        );
+      }
     }
   }
 

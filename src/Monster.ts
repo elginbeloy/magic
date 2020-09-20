@@ -187,13 +187,12 @@ export const MECI_WOLF = new MonsterType(
   2,
   1.5,
   [
-    { item: Item.APPRENTICE_WAND, probability: 0.12 },
-    { item: Item.NATURE_WAND, probability: 0.12 },
-    { item: Item.THE_OPAL_ROD, probability: 0.08 },
-    { item: Item.DARK_SPELL_BOOK, probability: 0.06 },
-    { item: Item.FIRE_EYE_STAFF, probability: 0.06 },
-    { item: Item.SPARK_WAND, probability: 0.04 },
-    { item: Item.STAFF_OF_HEALTH, probability: 0.01 }
+    { item: Item.APPRENTICE_WAND, probability: 0.09 },
+    { item: Item.NATURE_WAND, probability: 0.09 },
+    { item: Item.THE_OPAL_ROD, probability: 0.05 },
+    { item: Item.DARK_SPELL_BOOK, probability: 0.03 },
+    { item: Item.FIRE_EYE_STAFF, probability: 0.03 },
+    { item: Item.SPARK_WAND, probability: 0.01 }
   ]
 );
 
@@ -205,8 +204,8 @@ export const OGRE = new MonsterType(
   2,
   4,
   [
-    { item: Item.APPRENTICE_WAND, probability: 0.12 },
-    { item: Item.NATURE_WAND, probability: 0.12 },
+    { item: Item.APPRENTICE_WAND, probability: 0.09 },
+    { item: Item.NATURE_WAND, probability: 0.09 },
     { item: Item.THE_OPAL_ROD, probability: 0.08 },
     { item: Item.DARK_SPELL_BOOK, probability: 0.06 },
     { item: Item.FIRE_EYE_STAFF, probability: 0.06 },
@@ -225,9 +224,9 @@ export const MINOTAUR = new MonsterType(
   2,
   1.5,
   [
-    { item: Item.MINOTAURS_MIGHT, probability: 0.15 },
-    { item: Item.APPRENTICE_WAND, probability: 0.12 },
-    { item: Item.NATURE_WAND, probability: 0.12 },
+    { item: Item.MINOTAURS_MIGHT, probability: 0.1 },
+    { item: Item.APPRENTICE_WAND, probability: 0.09 },
+    { item: Item.NATURE_WAND, probability: 0.09 },
     { item: Item.THE_OPAL_ROD, probability: 0.08 }
   ]
 );
