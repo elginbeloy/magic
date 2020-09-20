@@ -35,6 +35,7 @@
           class="monster"
           v-for="monster of user.map.monsters"
           :key="monster.monster.name"
+          @click="selectedMonster = monster.monster"
         >
           <img :src="monster.monster.imagePath" />
           <div>
@@ -66,22 +67,22 @@
           </div>
         </div>
       </div>
-      <div class="subtitle">Items</div>
-      <div class="items-container">
-        <div class="item" v-for="item of availableItems" :key="item.item.name">
+      <div class="subtitle" v-if="selectedMonster">
+        {{ selectedMonster.name }}'s Items
+      </div>
+      <div class="items-container" v-if="selectedMonster">
+        <div
+          class="item"
+          v-for="item of selectedMonster.itemOptions"
+          :key="item.item.name"
+        >
           <img :src="item.item.imagePath" />
           <div>
             <a class="name">{{ item.item.name }}</a>
           </div>
           <div>
             <a>Probability</a>
-            <a class="desc" v-if="item.probabilityHigh === item.probabilityLow">
-              {{ item.probabilityLow * 100 }}%
-            </a>
-            <a class="desc" v-else>
-              {{ item.probabilityLow * 100 }}% -
-              {{ item.probabilityHigh * 100 }}%
-            </a>
+            <a class="desc"> {{ Math.round(item.probability * 100) }}% </a>
           </div>
           <div>
             <a>Sell Value</a>
@@ -103,6 +104,7 @@ import { mapState } from "vuex";
 import { MAPS, LocationMap } from "@/LocationMap.ts";
 import { User } from "@/User";
 import { Item } from "@/Item";
+import { Monster } from "@/Monster";
 
 @Component({
   computed: mapState(["user"]),
@@ -113,48 +115,12 @@ import { Item } from "@/Item";
 export default class Map extends Vue {
   user!: User;
   MAPS = MAPS;
+  selectedMonster: Monster | null = null;
 
   selectMap(map: LocationMap) {
     if (map.magicIQRequired <= this.user.magicIQ) {
       this.$store.commit("setMap", map);
     }
-  }
-
-  get availableItems(): {
-    [itemKey: string]: {
-      item: Item;
-      probabilityLow: number;
-      probabilityHigh: number;
-    };
-  } {
-    const items: {
-      [itemKey: string]: {
-        item: Item;
-        probabilityLow: number;
-        probabilityHigh: number;
-      };
-    } = {};
-
-    const monsters = this.user.map.monsters.map(monster => monster.monster);
-    for (const monster of monsters) {
-      for (const item of monster.itemOptions) {
-        if (items[item.item.key]) {
-          if (item.probability < items[item.item.key].probabilityLow) {
-            items[item.item.key].probabilityLow = item.probability;
-          } else if (item.probability > items[item.item.key].probabilityHigh) {
-            items[item.item.key].probabilityHigh = item.probability;
-          }
-        } else {
-          items[item.item.key] = {
-            item: item.item,
-            probabilityLow: item.probability,
-            probabilityHigh: item.probability
-          };
-        }
-      }
-    }
-
-    return items;
   }
 }
 </script>
@@ -268,6 +234,15 @@ export default class Map extends Vue {
   img {
     width: 150px;
     margin-bottom: 20px;
+  }
+}
+
+.monster {
+  cursor: pointer;
+  transition: 0.1s linear all;
+
+  &:hover {
+    box-shadow: 0 0 12px 4px $primary-blue;
   }
 }
 
