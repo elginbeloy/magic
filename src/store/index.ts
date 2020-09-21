@@ -174,9 +174,9 @@ export default new Vuex.Store({
       const equippedItems = { ...state.user.equippedItems };
       delete equippedItems[item.key];
 
-      const items = state.user.items.filter(
-        (currentItem: Item) => currentItem.key !== item.key
-      );
+      const items = [...state.user.items];
+      const firstIndex = items.findIndex(i => i.key == item.key);
+      items.splice(firstIndex, 1);
 
       Vue.set(state.user, "items", items);
       Vue.set(state.user, "equippedItems", equippedItems);
