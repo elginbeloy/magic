@@ -162,6 +162,68 @@ magicAttack.cast = (
   ]);
 };
 
+const lightningAttack = new Spell({
+  key: "lightningAttack",
+  name: "Lightning Attack",
+  desc:
+    "An incredibly quick, slightly effective attack. ~0.5x<span class='magic-word'>magicStrength</span> DMG.",
+  reloadTimeSeconds: 0.8,
+  manaCost: 1.0,
+  imagePath: require("@/assets/images/spells/lightning_attack.png"),
+  cost: 50
+});
+
+lightningAttack.cast = (
+  user: User,
+  monster: Monster,
+  store: any,
+  addInfoPopups: (popups: InfoPopup[]) => void
+): void => {
+  const damage = getAttackDamage(0.5 * user.magicStrength, user.magicPrecision);
+
+  store.commit("addMana", -magicAttack.manaCost);
+  store.dispatch("attackMonster", damage);
+
+  addInfoPopups([
+    {
+      text: damage == 0 ? "Miss!" : `${damage} DMG`,
+      colorHex: "red"
+    },
+    { text: `-${magicAttack.manaCost} Mana`, colorHex: "blue" }
+  ]);
+};
+
+const stormAttack = new Spell({
+  key: "stormAttack",
+  name: "Storm Attack",
+  desc:
+    "An incredibly quick, even more effective attack. ~<span class='magic-word'>magicStrength</span> DMG.",
+  reloadTimeSeconds: 0.8,
+  manaCost: 3.0,
+  imagePath: require("@/assets/images/spells/storm_attack.png"),
+  cost: 250
+});
+
+stormAttack.cast = (
+  user: User,
+  monster: Monster,
+  store: any,
+  addInfoPopups: (popups: InfoPopup[]) => void
+): void => {
+  const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
+
+  store.commit("addMana", -magicAttack.manaCost);
+  store.dispatch("attackMonster", damage);
+
+  addInfoPopups([
+    {
+      text: damage == 0 ? "Miss!" : `${damage} DMG`,
+      colorHex: "red"
+    },
+    { text: `-${magicAttack.manaCost} Mana`, colorHex: "blue" }
+  ]);
+};
+
 const fireSpell = new Spell({
   key: "fireSpell",
   name: "Fire Spell",
@@ -575,6 +637,8 @@ export const SPELLS: { [spellName: string]: Spell } = {
   healthRegain,
   manaRegain,
   magicAttack,
+  lightningAttack,
+  stormAttack,
   fireSpell,
   fireSpell2,
   fireSpell3,
