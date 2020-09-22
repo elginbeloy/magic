@@ -402,7 +402,7 @@ export default class Adventure extends Vue {
   border: 1px solid $primary-blue;
   border-radius: 4px;
   cursor: pointer;
-  transition: 0.3s linear all;
+  transition: 0.1s linear all;
 
   &__key {
     position: absolute;
