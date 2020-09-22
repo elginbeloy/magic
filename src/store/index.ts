@@ -171,23 +171,19 @@ export default new Vuex.Store({
       Vue.set(state.user, "items", [...state.user.items, item]);
     },
     sellItem(state, item: Item) {
-      const equippedItems = { ...state.user.equippedItems };
-      delete equippedItems[item.key];
-
       const items = [...state.user.items];
       const firstIndex = items.findIndex(i => i.key == item.key);
       items.splice(firstIndex, 1);
 
+      // If that was the last item and equipped, remove the equipped item.
+      if (items.findIndex(i => i.key == item.key) === -1) {
+        const equippedItems = { ...state.user.equippedItems };
+        delete equippedItems[item.key];
+        Vue.set(state.user, "equippedItems", equippedItems);
+      }
+
       Vue.set(state.user, "items", items);
-      Vue.set(state.user, "equippedItems", equippedItems);
       Vue.set(state.user, "gold", state.user.gold + item.sellValue);
-    },
-    removeItemByName(state, name: string) {
-      Vue.set(
-        state.user,
-        "items",
-        state.user.items.filter((item: Item) => item.name !== name)
-      );
     },
     equipItemByKey(state, itemKey: string) {
       const itemIndex: number = state.user.items.findIndex(
@@ -278,12 +274,6 @@ export default new Vuex.Store({
       ) {
         context.commit("addGold", -spell.cost);
         context.commit("addSpell", spell);
-      }
-    },
-    sellItem(context, item: Item) {
-      if (context.state.user.items.includes(item)) {
-        context.commit("addGold", item.sellValue);
-        context.commit("removeItemByName", item.name);
       }
     }
   },

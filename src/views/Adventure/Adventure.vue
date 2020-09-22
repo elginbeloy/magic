@@ -98,9 +98,7 @@
         :key="user.equippedSpells[spell].name"
         @click="castSpell(user.equippedSpells[spell])"
         :class="{
-          disabled: user.reloadingSpells.includes(
-            user.equippedSpells[spell].key
-          )
+          disabled: user.reloadingSpells.includes(spell)
         }"
       >
         <img :src="user.equippedSpells[spell].imagePath" />
@@ -108,6 +106,14 @@
         <div class="spell__mana">
           -{{ user.equippedSpells[spell].manaCost }} MP
         </div>
+        <div
+          class="spell__reloading-overlay"
+          :style="{
+            animationDuration:
+              user.equippedSpells[spell].reloadTimeSeconds + 's'
+          }"
+          v-if="user.reloadingSpells.includes(spell)"
+        />
       </div>
       <div
         class="spell"
@@ -260,6 +266,27 @@ export default class Adventure extends Vue {
 <style scoped lang="scss">
 @import "../../styles.scss";
 
+@keyframes infoPopup {
+  0% {
+    font-size: 12px;
+    opacity: 1;
+  }
+  100% {
+    font-size: 32px;
+    opacity: 0;
+    transform: translateY(-96px);
+  }
+}
+
+@keyframes reloadOverlay {
+  0% {
+    height: 100%;
+  }
+  100% {
+    height: 0%;
+  }
+}
+
 .adventure {
   position: absolute;
   top: 0;
@@ -344,18 +371,6 @@ export default class Adventure extends Vue {
   animation: infoPopup 2s ease-in-out;
 }
 
-@keyframes infoPopup {
-  0% {
-    font-size: 12px;
-    opacity: 1;
-  }
-  100% {
-    font-size: 32px;
-    opacity: 0;
-    transform: translateY(-96px);
-  }
-}
-
 .health-indicator {
   @include progress-bar($color: $primary-red);
 }
@@ -405,6 +420,18 @@ export default class Adventure extends Vue {
     color: $primary-blue;
   }
 
+  &__reloading-overlay {
+    position: absolute;
+    z-index: 100;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($primary-blue, 0.75);
+    animation-name: reloadOverlay;
+    animation-timing-function: linear;
+  }
+
   &:hover {
     box-shadow: 0 0 12px 4px $primary-blue;
     transform: scale(1.05);
@@ -414,12 +441,6 @@ export default class Adventure extends Vue {
     position: relative;
     width: 100%;
     height: 100%;
-    filter: grayscale(100%);
-    transition: 0.3s linear all;
-  }
-
-  &:hover img {
-    filter: none;
   }
 }
 
