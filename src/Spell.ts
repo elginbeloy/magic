@@ -269,7 +269,7 @@ fireSpell3.cast = (
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const damage = getAttackDamage(user.magicStrength * 2, user.magicPrecision);
+  const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
 
   store.commit("addMana", -fireSpell3.manaCost);
   store.dispatch("attackMonster", damage);
@@ -277,7 +277,7 @@ fireSpell3.cast = (
   store.commit(
     "addEffectInterval",
     setInterval(() => {
-      const burn = getAttackDamage(25, user.magicPrecision);
+      const burn = getAttackDamage(10, user.magicPrecision);
       store.dispatch("attackMonster", burn);
       addInfoPopups([
         {
@@ -285,7 +285,7 @@ fireSpell3.cast = (
           colorHex: "red"
         }
       ]);
-    }, 2000)
+    }, 1000)
   );
 
   addInfoPopups([
@@ -386,10 +386,10 @@ lifeLeach3.cast = (
 
   addInfoPopups([
     {
-      text: "Life Stolen!",
+      text: damage == 0 ? "Miss!" : `${damage} Life Stolen!`,
       colorHex: "red"
     },
-    { text: `-${lifeLeach3.manaCost} Mana`, colorHex: "blue" }
+    { text: `-${lifeLeach2.manaCost} Mana`, colorHex: "blue" }
   ]);
 };
 
@@ -445,10 +445,10 @@ deathSpell.cast = (
 
   addInfoPopups([
     {
-      text: "Life Stolen!",
+      text: damage == 0 ? "Miss!" : `${damage} DMG`,
       colorHex: "red"
     },
-    { text: `-${deathSpell.manaCost} Mana`, colorHex: "blue" }
+    { text: `-${lifeLeach2.manaCost} Mana`, colorHex: "blue" }
   ]);
 };
 
