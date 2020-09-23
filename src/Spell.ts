@@ -76,9 +76,9 @@ const healthRegain = new Spell({
   key: "healthRegain",
   name: "Life Regain",
   desc:
-    "The first known healing spell. Regain <span class='magic-word'>magicStrength</span> HP.",
+    "A simple life regain spell. Regain <span class='magic-word'>magicStrength</span> health.",
   reloadTimeSeconds: 5.0,
-  manaCost: 2.0,
+  manaCost: 3.0,
   imagePath: require("@/assets/images/spells/health_1.png"),
   cost: 0
 });
@@ -105,7 +105,7 @@ const manaRegain = new Spell({
   key: "manaRegain",
   name: "Magic Regain",
   desc:
-    "The first known mana spell. Regain <span class='magic-word'>magicStrength</span> MP.",
+    "The simple mana regain spell. Regain ~0.5<span class='magic-word'>magicStrength</span> MP.",
   reloadTimeSeconds: 5.0,
   manaCost: 0.0,
   imagePath: require("@/assets/images/spells/mana_regain_1.png"),
@@ -118,11 +118,11 @@ manaRegain.cast = (
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  store.commit("addMana", user.magicStrength);
+  store.commit("addMana", Math.floor(user.magicStrength * 0.5));
 
   addInfoPopups([
     {
-      text: `+${user.magicStrength} Mana`,
+      text: `+${Math.floor(user.magicStrength * 0.5)} Mana`,
       colorHex: "blue"
     }
   ]);
@@ -133,7 +133,7 @@ const magicAttack = new Spell({
   name: "A Simple Attack Spell",
   desc:
     "You found it on page 1. ~0.25x<span class='magic-word'>magicStrength</span> DMG.",
-  reloadTimeSeconds: 1.0,
+  reloadTimeSeconds: 2.0,
   manaCost: 1.0,
   imagePath: require("@/assets/images/spells/magic_attack_1.png"),
   cost: 0
@@ -166,8 +166,8 @@ const lightningAttack = new Spell({
   key: "lightningAttack",
   name: "Lightning Attack",
   desc:
-    "An incredibly quick, slightly effective attack. ~0.5x<span class='magic-word'>magicStrength</span> DMG.",
-  reloadTimeSeconds: 0.8,
+    "An incredibly quick, slightly effective attack. ~0.25x<span class='magic-word'>magicStrength</span> DMG.",
+  reloadTimeSeconds: 1.0,
   manaCost: 1.0,
   imagePath: require("@/assets/images/spells/lightning_attack.png"),
   cost: 50
@@ -179,7 +179,10 @@ lightningAttack.cast = (
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ): void => {
-  const damage = getAttackDamage(0.5 * user.magicStrength, user.magicPrecision);
+  const damage = getAttackDamage(
+    0.25 * user.magicStrength,
+    user.magicPrecision
+  );
 
   store.commit("addMana", -magicAttack.manaCost);
   store.dispatch("attackMonster", damage);
@@ -198,7 +201,7 @@ const stormAttack = new Spell({
   name: "Storm Attack",
   desc:
     "An incredibly quick, even more effective attack. ~<span class='magic-word'>magicStrength</span> DMG.",
-  reloadTimeSeconds: 0.8,
+  reloadTimeSeconds: 1.0,
   manaCost: 3.0,
   imagePath: require("@/assets/images/spells/storm_attack.png"),
   cost: 250
@@ -224,15 +227,46 @@ stormAttack.cast = (
   ]);
 };
 
+const darkLightning = new Spell({
+  key: "darkLightning",
+  name: "Dark Lightning",
+  desc:
+    "The lightning is purple and blinding. ~1.5x<span class='magic-word'>magicStrength</span> DMG.",
+  reloadTimeSeconds: 0.8,
+  manaCost: 5.0,
+  imagePath: require("@/assets/images/spells/dark_lightning.png"),
+  cost: 500
+});
+
+darkLightning.cast = (
+  user: User,
+  monster: Monster,
+  store: any,
+  addInfoPopups: (popups: InfoPopup[]) => void
+): void => {
+  const damage = getAttackDamage(1.5 * user.magicStrength, user.magicPrecision);
+
+  store.commit("addMana", -magicAttack.manaCost);
+  store.dispatch("attackMonster", damage);
+
+  addInfoPopups([
+    {
+      text: damage == 0 ? "Miss!" : `${damage} DMG`,
+      colorHex: "red"
+    },
+    { text: `-${magicAttack.manaCost} Mana`, colorHex: "blue" }
+  ]);
+};
+
 const fireSpell = new Spell({
   key: "fireSpell",
   name: "Fire Spell",
   desc:
-    "Shoot fire. Seems lit. ~0.5<span class='magic-word'>magicStrength</span> DMG. ~3 DMG / second burn effect.",
-  reloadTimeSeconds: 5.0,
-  manaCost: 5.0,
+    "Shoot fire. Seems lit. ~0.5x<span class='magic-word'>magicStrength</span> DMG. ~3 DMG / second burn effect.",
+  reloadTimeSeconds: 2.0,
+  manaCost: 3.0,
   imagePath: require("@/assets/images/spells/fire_spell_1.png"),
-  cost: 50
+  cost: 100
 });
 
 fireSpell.cast = (
@@ -273,11 +307,11 @@ const fireSpell2 = new Spell({
   key: "fireSpell2",
   name: "Fire Spell II",
   desc:
-    "Shoot large fire blasts. ~<span class='magic-word'>magicStrength</span> DMG. ~5 DMG / second burn effect.",
-  reloadTimeSeconds: 5.0,
+    "Shoot large fire blasts. ~<span class='magic-word'>magicStrength</span> DMG. ~6 DMG / second burn effect.",
+  reloadTimeSeconds: 2.0,
   manaCost: 5.0,
   imagePath: require("@/assets/images/spells/fire_spell_2.png"),
-  cost: 100
+  cost: 500
 });
 
 fireSpell2.cast = (
@@ -294,7 +328,7 @@ fireSpell2.cast = (
   store.commit(
     "addEffectInterval",
     setInterval(() => {
-      const burn = getAttackDamage(5, user.magicPrecision);
+      const burn = getAttackDamage(6, user.magicPrecision);
       store.dispatch("attackMonster", burn);
       addInfoPopups([
         {
@@ -318,11 +352,11 @@ const fireSpell3 = new Spell({
   key: "fireSpell3",
   name: "Fire Spell III",
   desc:
-    "Even more powerful fire magic. ~<span class='magic-word'>magicStrength</span> DMG with a ~10 DMG / second burn effect.",
-  reloadTimeSeconds: 5.0,
+    "Even more powerful fire magic. ~2.5x<span class='magic-word'>magicStrength</span> DMG. ~10 DMG / second burn effect.",
+  reloadTimeSeconds: 3.0,
   manaCost: 5.0,
   imagePath: require("@/assets/images/spells/fire_spell_3.png"),
-  cost: 500
+  cost: 1500
 });
 
 fireSpell3.cast = (
@@ -331,7 +365,7 @@ fireSpell3.cast = (
   store: any,
   addInfoPopups: (popups: InfoPopup[]) => void
 ) => {
-  const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
+  const damage = getAttackDamage(2.5 * user.magicStrength, user.magicPrecision);
 
   store.commit("addMana", -fireSpell3.manaCost);
   store.dispatch("attackMonster", damage);
@@ -397,9 +431,9 @@ const lifeLeach2 = new Spell({
   desc:
     "Steal ~<span class='magic-word'>magicStrength</span> health points from your enemy.",
   reloadTimeSeconds: 5.0,
-  manaCost: 5.0,
+  manaCost: 10.0,
   imagePath: require("@/assets/images/spells/life_leach_2.png"),
-  cost: 250
+  cost: 500
 });
 
 lifeLeach2.cast = (
@@ -427,11 +461,11 @@ const lifeLeach3 = new Spell({
   key: "lifeLeach3",
   name: "Life Leach III",
   desc:
-    "Steal ~<span class='magic-word'>magicStrength</span> health points from your enemy.",
+    "Steal ~<span class='magic-word'>magicStrength</span> health points from your enemy - faster.",
   reloadTimeSeconds: 3.0,
-  manaCost: 5.0,
+  manaCost: 10.0,
   imagePath: require("@/assets/images/spells/life_leach_3.png"),
-  cost: 500
+  cost: 1000
 });
 
 lifeLeach3.cast = (
@@ -487,11 +521,11 @@ const deathSpell = new Spell({
   key: "deathSpell",
   name: "Death Spell",
   desc:
-    "A spell made solely for killing. ~5x<span class='magic-word'>magicStrength</span> DMG.",
-  reloadTimeSeconds: 3.0,
-  manaCost: 10.0,
+    "A spell made solely for killing. Incredibly fast and powerful. ~5x<span class='magic-word'>magicStrength</span> DMG.",
+  reloadTimeSeconds: 1.0,
+  manaCost: 20.0,
   imagePath: require("@/assets/images/spells/death_spell.png"),
-  cost: 500
+  cost: 5000
 });
 
 deathSpell.cast = (
@@ -639,6 +673,7 @@ export const SPELLS: { [spellName: string]: Spell } = {
   magicAttack,
   lightningAttack,
   stormAttack,
+  darkLightning,
   fireSpell,
   fireSpell2,
   fireSpell3,

@@ -160,7 +160,15 @@ export default class Adventure extends Vue {
   expImage: string = require("@/assets/images/exp.png");
 
   mounted() {
-    this.getMonster();
+    // If there is nothing to show for the victory screen, generate a monster on mount.
+    if (
+      !this.user.levelUp &&
+      !this.user.dead &&
+      !this.monster &&
+      !this.user.lastExpReward
+    ) {
+      this.getMonster();
+    }
   }
 
   confirm() {

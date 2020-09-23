@@ -173,16 +173,16 @@ export default new Vuex.Store({
     sellItem(state, item: Item) {
       const items = [...state.user.items];
       const firstIndex = items.findIndex(i => i.key == item.key);
-      items.splice(firstIndex, 1);
 
-      // If that was the last item and equipped, remove the equipped item.
-      if (items.findIndex(i => i.key == item.key) === -1) {
+      if (firstIndex === -1) {
         const equippedItems = { ...state.user.equippedItems };
         delete equippedItems[item.key];
         Vue.set(state.user, "equippedItems", equippedItems);
+      } else {
+        items.splice(firstIndex, 1);
+        Vue.set(state.user, "items", items);
       }
 
-      Vue.set(state.user, "items", items);
       Vue.set(state.user, "gold", state.user.gold + item.sellValue);
     },
     equipItemByKey(state, itemKey: string) {
