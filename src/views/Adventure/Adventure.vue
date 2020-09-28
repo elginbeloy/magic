@@ -29,7 +29,7 @@
         {
           iconImage: fightImage,
           titleText: 'stat points',
-          changeText: '+5'
+          changeText: user.level * 5
         },
         {
           iconImage: shopImage,

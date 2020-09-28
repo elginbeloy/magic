@@ -184,7 +184,7 @@ lightningAttack.cast = (
     user.magicPrecision
   );
 
-  store.commit("addMana", -magicAttack.manaCost);
+  store.commit("addMana", -lightningAttack.manaCost);
   store.dispatch("attackMonster", damage);
 
   addInfoPopups([
@@ -192,7 +192,7 @@ lightningAttack.cast = (
       text: damage == 0 ? "Miss!" : `${damage} DMG`,
       colorHex: "red"
     },
-    { text: `-${magicAttack.manaCost} Mana`, colorHex: "blue" }
+    { text: `-${lightningAttack.manaCost} Mana`, colorHex: "blue" }
   ]);
 };
 
@@ -215,7 +215,7 @@ stormAttack.cast = (
 ): void => {
   const damage = getAttackDamage(user.magicStrength, user.magicPrecision);
 
-  store.commit("addMana", -magicAttack.manaCost);
+  store.commit("addMana", -stormAttack.manaCost);
   store.dispatch("attackMonster", damage);
 
   addInfoPopups([
@@ -223,7 +223,7 @@ stormAttack.cast = (
       text: damage == 0 ? "Miss!" : `${damage} DMG`,
       colorHex: "red"
     },
-    { text: `-${magicAttack.manaCost} Mana`, colorHex: "blue" }
+    { text: `-${stormAttack.manaCost} Mana`, colorHex: "blue" }
   ]);
 };
 
@@ -246,7 +246,7 @@ darkLightning.cast = (
 ): void => {
   const damage = getAttackDamage(1.5 * user.magicStrength, user.magicPrecision);
 
-  store.commit("addMana", -magicAttack.manaCost);
+  store.commit("addMana", -darkLightning.manaCost);
   store.dispatch("attackMonster", damage);
 
   addInfoPopups([
@@ -254,7 +254,7 @@ darkLightning.cast = (
       text: damage == 0 ? "Miss!" : `${damage} DMG`,
       colorHex: "red"
     },
-    { text: `-${magicAttack.manaCost} Mana`, colorHex: "blue" }
+    { text: `-${darkLightning.manaCost} Mana`, colorHex: "blue" }
   ]);
 };
 

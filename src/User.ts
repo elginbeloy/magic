@@ -36,8 +36,22 @@ export interface User {
   reloadingSpells: string[];
   reloadRemovalTimeouts: number[];
 
+  // Followers stats.
+  maxKnights: number;
+  maxWizards: number;
+
+  // Followers.
+  knights: number[];
+  wizards: number[];
+  buildings: { building: string; x: number }[];
+
   items: Item[];
   equippedItems: { [itemName: string]: Item };
+}
+
+export interface LandLocation {
+  x: 0;
+  width: 0;
 }
 
 export enum USER_STAT {
@@ -60,17 +74,12 @@ export const USER_STAT_DISPLAY_NAME_MAP: { [key in USER_STAT]: string } = {
 
 export const USER_LEVELS = [
   10,
-  15,
-  20,
   25,
   50,
   100,
-  175,
   250,
   500,
   1000,
-  1500,
-  2000,
   2500,
   5000,
   10000,
@@ -107,5 +116,10 @@ export const BASE_USER: User = {
   reloadRemovalTimeouts: [],
   items: [],
   lastRewardItems: [],
-  equippedItems: {}
+  equippedItems: {},
+  maxKnights: 0,
+  maxWizards: 0,
+  knights: [],
+  wizards: [],
+  buildings: []
 };

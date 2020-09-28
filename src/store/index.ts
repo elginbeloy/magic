@@ -116,7 +116,7 @@ export default new Vuex.Store({
           ...state.user,
           level: state.user.level + 1,
           exp: 0,
-          statPoints: state.user.statPoints + 5,
+          statPoints: state.user.statPoints + (state.user.level + 1) * 5,
           levelUp: true,
           lastGoldReward: Math.round((state.user.level + 2) ** 2.75)
         };
@@ -212,6 +212,15 @@ export default new Vuex.Store({
       const equippedItems = { ...state.user.equippedItems };
       delete equippedItems[itemKey];
       Vue.set(state.user, "equippedItems", equippedItems);
+    },
+    addMaxKnights(state, amount: number) {
+      Vue.set(state.user, "maxKnights", state.user.maxKnights + amount);
+    },
+    addMaxWizards(state, amount: number) {
+      Vue.set(state.user, "maxWizards", state.user.maxWizards + amount);
+    },
+    addBuilding(state, building: { building: string; x: number }) {
+      Vue.set(state.user, "buildings", [...state.user.buildings, building]);
     },
     restart(state) {
       state.user = { ...BASE_USER };
