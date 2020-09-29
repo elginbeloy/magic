@@ -1,6 +1,13 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { User, USER_STAT, BASE_USER, USER_LEVELS } from "@/User.ts";
+import {
+  User,
+  USER_STAT,
+  BASE_USER,
+  USER_LEVELS,
+  Follower,
+  Building
+} from "@/User.ts";
 import { Monster } from "@/Monster";
 import { Spell } from "@/Spell";
 import { LocationMap } from "@/LocationMap";
@@ -170,6 +177,12 @@ export default new Vuex.Store({
     addItem(state, item: Item) {
       Vue.set(state.user, "items", [...state.user.items, item]);
     },
+    removeItemByKey(state, key: string) {
+      const items = [...state.user.items];
+      const firstIndex = items.findIndex(i => i.key == key);
+      items.splice(firstIndex, 1);
+      Vue.set(state.user, "items", items);
+    },
     sellItem(state, item: Item) {
       const items = [...state.user.items];
       const firstIndex = items.findIndex(i => i.key == item.key);
@@ -219,8 +232,11 @@ export default new Vuex.Store({
     addMaxWizards(state, amount: number) {
       Vue.set(state.user, "maxWizards", state.user.maxWizards + amount);
     },
-    addBuilding(state, building: { building: string; x: number }) {
+    addBuilding(state, building: Building) {
       Vue.set(state.user, "buildings", [...state.user.buildings, building]);
+    },
+    addFollower(state, follower: Follower) {
+      Vue.set(state.user, "followers", [...state.user.followers, follower]);
     },
     restart(state) {
       state.user = { ...BASE_USER };

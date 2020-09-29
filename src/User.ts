@@ -36,22 +36,29 @@ export interface User {
   reloadingSpells: string[];
   reloadRemovalTimeouts: number[];
 
-  // Followers stats.
+  // Building & Followers stats.
   maxKnights: number;
   maxWizards: number;
 
-  // Followers.
-  knights: number[];
-  wizards: number[];
-  buildings: { building: string; x: number }[];
+  buildings: Building[];
+  followers: Follower[];
 
   items: Item[];
   equippedItems: { [itemName: string]: Item };
 }
 
-export interface LandLocation {
-  x: 0;
-  width: 0;
+export interface Building {
+  building: string;
+  image: string;
+  x: number;
+  size: number;
+}
+
+export interface Follower {
+  follower: string;
+  image: string;
+  x: number;
+  size: number;
 }
 
 export enum USER_STAT {
@@ -119,7 +126,6 @@ export const BASE_USER: User = {
   equippedItems: {},
   maxKnights: 0,
   maxWizards: 0,
-  knights: [],
-  wizards: [],
+  followers: [],
   buildings: []
 };
