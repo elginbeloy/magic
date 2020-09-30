@@ -37,25 +37,16 @@ export interface User {
   reloadRemovalTimeouts: number[];
 
   // Building & Followers stats.
-  maxKnights: number;
-  maxWizards: number;
-
-  buildings: Building[];
-  followers: Follower[];
+  maxFollowers: number;
+  buildings: Avatar[];
+  followers: Avatar[];
 
   items: Item[];
   equippedItems: { [itemName: string]: Item };
 }
 
-export interface Building {
-  building: string;
-  image: string;
-  x: number;
-  size: number;
-}
-
-export interface Follower {
-  follower: string;
+export interface Avatar {
+  name: string;
   image: string;
   x: number;
   size: number;
@@ -74,8 +65,8 @@ export const USER_STAT_DISPLAY_NAME_MAP: { [key in USER_STAT]: string } = {
   [USER_STAT.HP]: "HP",
   [USER_STAT.MP]: "MP",
   [USER_STAT.MAGIC_IQ]: "Magic IQ",
-  [USER_STAT.MAGIC_STRENGTH]: "Magic Strength",
-  [USER_STAT.MAGIC_PRECISION]: "Magic Precision",
+  [USER_STAT.MAGIC_STRENGTH]: "Strength",
+  [USER_STAT.MAGIC_PRECISION]: "Precision",
   [USER_STAT.LUCK]: "Luck"
 };
 
@@ -124,8 +115,7 @@ export const BASE_USER: User = {
   items: [],
   lastRewardItems: [],
   equippedItems: {},
-  maxKnights: 0,
-  maxWizards: 0,
+  maxFollowers: 0,
   followers: [],
   buildings: []
 };

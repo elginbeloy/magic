@@ -99,7 +99,7 @@ export const GHOST = new MonsterType(
   1,
   2,
   [
-    { item: Item.GHOST_STONE, probability: 1.0 },
+    { item: Item.UNDEAD_STONE, probability: 0.5 },
     { item: Item.BASIC_WIZARD_HAT, probability: 0.05 }
   ]
 );
@@ -112,6 +112,7 @@ export const ZOMBIE = new MonsterType(
   1.1,
   2,
   [
+    { item: Item.UNDEAD_STONE, probability: 0.5 },
     { item: Item.BASIC_WIZARD_HAT, probability: 0.08 },
     { item: Item.BASIC_STAFF, probability: 0.06 },
     { item: Item.BASIC_WAND, probability: 0.05 },
@@ -347,6 +348,7 @@ export const HOSTILE_WIZARD = new MonsterType(
   3.5,
   2,
   [
+    { item: Item.MAGIC_STONE, probability: 1.0 },
     { item: Item.MANA_HAT, probability: 0.1 },
     { item: Item.MAGIC_STAFF, probability: 0.9 },
     { item: Item.MAGIC_SCROLL, probability: 0.08 },
@@ -365,6 +367,7 @@ export const NECROMANCER = new MonsterType(
   5,
   5,
   [
+    { item: Item.MAGIC_STONE, probability: 1.0 },
     { item: Item.MANA_HAT, probability: 0.1 },
     { item: Item.MAGIC_STAFF, probability: 0.9 },
     { item: Item.MAGIC_SCROLL, probability: 0.08 },

@@ -38,20 +38,29 @@ export class Item {
 
 /* ====== Summoning Items ====== */
 
-export const GHOST_STONE = new Item(
-  "ghost_stone",
-  "Ghost Stone",
-  "You can barely make out ghosts floating inside. Adds +1 magicIQ.",
-  require("@/assets/images/items/ghost_stone.png"),
-  10,
-  [{ statName: "magicIQ", amount: 1 }]
+export const UNDEAD_STONE = new Item(
+  "undead_stone",
+  "Undead Stone",
+  "You see the lives of all those lost, learn from them. +1 magicPrecision.",
+  require("@/assets/images/items/undead_stone.png"),
+  5,
+  [{ statName: "magicPrecision", amount: 1 }]
 );
 
 export const SOUL_STONE = new Item(
   "soul_stone",
   "Soul Stone",
-  "It glows with life. You see memories inside. Adds +1 magicStrength.",
+  "It glows with life. You see memories inside. +1 magicIQ.",
   require("@/assets/images/items/soul_stone.png"),
+  10,
+  [{ statName: "magicIQ", amount: 1 }]
+);
+
+export const MAGIC_STONE = new Item(
+  "magic_stone",
+  "Magic Stone",
+  "You see thousands of Wizards casting spells in the stone. +1 magicStrength.",
+  require("@/assets/images/items/magic_stone.png"),
   25,
   [{ statName: "magicStrength", amount: 1 }]
 );

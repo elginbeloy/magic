@@ -1,13 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {
-  User,
-  USER_STAT,
-  BASE_USER,
-  USER_LEVELS,
-  Follower,
-  Building
-} from "@/User.ts";
+import { User, USER_STAT, BASE_USER, USER_LEVELS, Avatar } from "@/User.ts";
 import { Monster } from "@/Monster";
 import { Spell } from "@/Spell";
 import { LocationMap } from "@/LocationMap";
@@ -226,16 +219,13 @@ export default new Vuex.Store({
       delete equippedItems[itemKey];
       Vue.set(state.user, "equippedItems", equippedItems);
     },
-    addMaxKnights(state, amount: number) {
-      Vue.set(state.user, "maxKnights", state.user.maxKnights + amount);
+    addMaxFollowers(state, amount: number) {
+      Vue.set(state.user, "maxFollowers", state.user.maxFollowers + amount);
     },
-    addMaxWizards(state, amount: number) {
-      Vue.set(state.user, "maxWizards", state.user.maxWizards + amount);
-    },
-    addBuilding(state, building: Building) {
+    addBuilding(state, building: Avatar) {
       Vue.set(state.user, "buildings", [...state.user.buildings, building]);
     },
-    addFollower(state, follower: Follower) {
+    addFollower(state, follower: Avatar) {
       Vue.set(state.user, "followers", [...state.user.followers, follower]);
     },
     restart(state) {

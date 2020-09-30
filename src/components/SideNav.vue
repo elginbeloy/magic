@@ -13,7 +13,10 @@
 
     <div class="stats-container">
       <div class="stat">
-        <a>Gold:</a>
+        <div class="stat__title">
+          <img class="stat__icon" src="../assets/images/shop.png" />
+          Gold
+        </div>
         <div>
           <a>{{ user.gold }}</a>
         </div>
@@ -24,14 +27,15 @@
           <a>{{ user.statPoints }}</a>
         </div>
       </div>
-      <div class="stat" v-for="stat of USER_STAT" :key="stat">
-        <a>
-          {{ USER_STAT_DISPLAY_NAME_MAP[stat] }}
-        </a>
+      <div class="stat" v-for="stat of stats" :key="stat.stat">
+        <div class="stat__title">
+          <img class="stat__icon" :src="stat.imagePath" />
+          {{ stat.name }}
+        </div>
         <div>
-          <a> {{ user[stat] }} </a>
-          <button @click="addStat(stat)" v-if="user.statPoints > 0">
-            +<sup v-if="stat == 'HP'">5</sup>
+          <a> {{ user[stat.stat] }} </a>
+          <button @click="addStat(stat.stat)" v-if="user.statPoints > 0">
+            +<sup v-if="stat.stat == 'HP'">5</sup>
           </button>
         </div>
       </div>
@@ -80,6 +84,38 @@ export default class SideNav extends Vue {
   USER_STAT = USER_STAT;
   USER_STAT_DISPLAY_NAME_MAP = USER_STAT_DISPLAY_NAME_MAP;
   USER_LEVELS = USER_LEVELS;
+  stats = [
+    {
+      stat: USER_STAT.HP,
+      name: USER_STAT_DISPLAY_NAME_MAP.HP,
+      imagePath: require("@/assets/images/stats/hp.png")
+    },
+    {
+      stat: USER_STAT.MP,
+      name: USER_STAT_DISPLAY_NAME_MAP.MP,
+      imagePath: require("@/assets/images/stats/mp.png")
+    },
+    {
+      stat: USER_STAT.MAGIC_IQ,
+      name: USER_STAT_DISPLAY_NAME_MAP.magicIQ,
+      imagePath: require("@/assets/images/stats/magic_iq.png")
+    },
+    {
+      stat: USER_STAT.MAGIC_STRENGTH,
+      name: USER_STAT_DISPLAY_NAME_MAP.magicStrength,
+      imagePath: require("@/assets/images/stats/magic_strength.png")
+    },
+    {
+      stat: USER_STAT.MAGIC_PRECISION,
+      name: USER_STAT_DISPLAY_NAME_MAP.magicPrecision,
+      imagePath: require("@/assets/images/stats/magic_precision.png")
+    },
+    {
+      stat: USER_STAT.LUCK,
+      name: USER_STAT_DISPLAY_NAME_MAP.luck,
+      imagePath: require("@/assets/images/stats/luck.png")
+    }
+  ];
 
   addStat(stat: USER_STAT) {
     if (this.user.statPoints > 0) {
@@ -123,7 +159,7 @@ export default class SideNav extends Vue {
 }
 
 .stat {
-  height: 50px;
+  height: 55px;
   color: #fff;
   display: flex;
   align-items: center;
@@ -156,6 +192,23 @@ export default class SideNav extends Vue {
 
   button:hover {
     box-shadow: inset 0 0 4px 1px #00000080;
+  }
+
+  &__title {
+    position: relative;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 4px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
   }
 }
 

@@ -18,7 +18,7 @@
         :key="item.name"
         @click="buyItem(item)"
       >
-        <img :src="item.image" />
+        <img :src="item.imagePath" />
         <div class="item__info-container">
           <a class="item__title">{{ item.name }}</a>
           <a class="item__effect">
@@ -49,9 +49,9 @@ export default class ShopContainer extends Vue {
   @Prop({ default: [] })
   items!: {
     name: string;
-    image: string;
+    imagePath: string;
     effectText: string;
-    cost: string;
+    cost: string | number;
     desc: string;
   }[][];
 
