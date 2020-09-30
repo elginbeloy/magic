@@ -1,4 +1,4 @@
-import { Avatar } from "./User";
+import { Avatar, USER_STAT } from "./User";
 import { Item } from "./Item";
 
 export class Follower {
@@ -8,8 +8,7 @@ export class Follower {
   desc: string;
   cost: string;
   costItemKey: string;
-  effects: { statName: string; amount: number }[];
-  avatar: Avatar;
+  effects: { statName: USER_STAT; amount: number }[];
 
   constructor(
     name: string,
@@ -18,7 +17,7 @@ export class Follower {
     desc: string,
     cost: string,
     costItemKey: string,
-    effects: { statName: string; amount: number }[]
+    effects: { statName: USER_STAT; amount: number }[]
   ) {
     this.name = name;
     this.imagePath = imagePath;
@@ -27,26 +26,24 @@ export class Follower {
     this.cost = cost;
     this.costItemKey = costItemKey;
     this.effects = effects;
-    this.avatar = {
-      name: name,
-      image: imagePath,
-      x: Math.round(Math.random() * 100),
-      size: 32 + Math.random() * 3
-    };
   }
 
-  // Should override.
   purchaseEffect(store: any) {
-    const soulStones = store.state.user.items.filter(
+    const availableItems = store.state.user.items.filter(
       (item: Item) => item.key === this.costItemKey
     ).length;
-    const knights = store.state.user.followers.filter(
-      (follower: Follower) => follower.name === this.name
-    ).length;
 
-    if (soulStones > 0 && knights < store.state.user.maxKnights) {
+    if (
+      availableItems > 0 &&
+      store.state.user.followers.length < store.state.user.maxFollowers
+    ) {
       store.commit("removeItemByKey", this.costItemKey);
-      store.commit("addFollower", this.avatar);
+      store.commit("addFollower", {
+        name: this.name,
+        imagePath: this.imagePath,
+        x: Math.round(Math.round(Math.random() * 100)),
+        size: Math.round(32 + Math.random() * 3)
+      });
     }
   }
 }
@@ -58,7 +55,7 @@ export const UNDEAD = new Follower(
   "An undead follower loyal beyond life.",
   "Undead Stone",
   "undead_stone",
-  [{ statName: "magicPrecision", amount: 1 }]
+  [{ statName: USER_STAT.MAGIC_PRECISION, amount: 1 }]
 );
 
 export const KNIGHT = new Follower(
@@ -68,7 +65,17 @@ export const KNIGHT = new Follower(
   "A loyal knight follower",
   "Soul Stone",
   "soul_stone",
-  [{ statName: "magicIQ", amount: 1 }]
+  [{ statName: USER_STAT.MAGIC_IQ, amount: 1 }]
+);
+
+export const GOBLIN = new Follower(
+  "Goblin",
+  require("@/assets/images/followers/goblin.png"),
+  "+1 Goblin (+1 luck / lvl)",
+  "A goblin that seems to love and learn from you.",
+  "Goblin Stone",
+  "goblin_stone",
+  [{ statName: USER_STAT.LUCK, amount: 1 }]
 );
 
 export const WIZARD = new Follower(
@@ -78,7 +85,7 @@ export const WIZARD = new Follower(
   "A wizard that follows you to learn.",
   "Soul Stone",
   "soul_stone",
-  [{ statName: "magicStrength", amount: 1 }]
+  [{ statName: USER_STAT.MAGIC_STRENGTH, amount: 1 }]
 );
 
 export const HEALER_YANG = new Follower(
@@ -88,7 +95,14 @@ export const HEALER_YANG = new Follower(
   "A powerful healer known to help wizards.",
   "Health Stone",
   "heath_stone",
-  [{ statName: "HP", amount: 5 }]
+  [{ statName: USER_STAT.HP, amount: 5 }]
 );
 
-export const FOLLOWERS = [UNDEAD, KNIGHT, WIZARD, HEALER_YANG];
+export const FOLLOWERS = [UNDEAD, KNIGHT, GOBLIN, WIZARD, HEALER_YANG];
+export const FOLLOWERS_MAP = {
+  [UNDEAD.name]: UNDEAD,
+  [KNIGHT.name]: KNIGHT,
+  [GOBLIN.name]: GOBLIN,
+  [WIZARD.name]: WIZARD,
+  [HEALER_YANG.name]: HEALER_YANG
+};

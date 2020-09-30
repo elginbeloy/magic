@@ -53,6 +53,7 @@ export default class ShopContainer extends Vue {
     effectText: string;
     cost: string | number;
     desc: string;
+    purchaseEffect: (store: any) => void;
   }[][];
 
   selectedTabIcon: string = this.tabIcons[0];
@@ -61,7 +62,7 @@ export default class ShopContainer extends Vue {
   }
 
   buyItem(item: any) {
-    item.effect(this.$store);
+    item.purchaseEffect(this.$store);
   }
 }
 </script>

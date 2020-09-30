@@ -129,6 +129,7 @@ export const GOBLIN = new MonsterType(
   1.2,
   2,
   [
+    { item: Item.GOBLIN_STONE, probability: 0.5 },
     { item: Item.BASIC_WIZARD_HAT, probability: 0.09 },
     { item: Item.BASIC_STAFF, probability: 0.07 },
     { item: Item.BASIC_WAND, probability: 0.06 },

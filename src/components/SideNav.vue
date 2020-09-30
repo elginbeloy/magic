@@ -31,6 +31,11 @@
         <div class="stat__title">
           <img class="stat__icon" :src="stat.imagePath" />
           {{ stat.name }}
+          <img
+            class="stat__icon"
+            :src="stat.imagePath"
+            v-if="stat.stat === 'HP' || stat.stat === 'MP'"
+          />
         </div>
         <div>
           <a> {{ user[stat.stat] }} </a>
@@ -208,7 +213,11 @@ export default class SideNav extends Vue {
     position: relative;
     width: 25px;
     height: 25px;
-    margin-right: 10px;
+    margin-right: 15px;
+  }
+
+  &__icon:nth-child(2) {
+    margin-left: 15px;
   }
 }
 

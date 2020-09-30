@@ -13,8 +13,8 @@
     <div class="location-container">
       <img
         class="building"
-        :src="building.imagePath"
         v-for="(building, index) of user.buildings"
+        :src="building.imagePath"
         :key="building.name + building.x"
         :style="{
           left: `${building.x}%`,
@@ -25,8 +25,8 @@
       />
       <img
         class="follower"
-        :src="follower.imagePath"
         v-for="(follower, index) of user.followers"
+        :src="follower.imagePath"
         :key="follower.name + follower.x"
         :style="{
           left: `${follower.x}%`,

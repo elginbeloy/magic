@@ -47,6 +47,15 @@ export const UNDEAD_STONE = new Item(
   [{ statName: "magicPrecision", amount: 1 }]
 );
 
+export const GOBLIN_STONE = new Item(
+  "goblin_stone",
+  "Goblin Stone",
+  "Like diamonds but for goblins. They treasure and collect these. +1 luck.",
+  require("@/assets/images/items/goblin_stone.png"),
+  15,
+  [{ statName: "luck", amount: 1 }]
+);
+
 export const SOUL_STONE = new Item(
   "soul_stone",
   "Soul Stone",

@@ -47,7 +47,7 @@ export interface User {
 
 export interface Avatar {
   name: string;
-  image: string;
+  imagePath: string;
   x: number;
   size: number;
 }

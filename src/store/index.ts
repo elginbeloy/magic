@@ -5,6 +5,7 @@ import { Monster } from "@/Monster";
 import { Spell } from "@/Spell";
 import { LocationMap } from "@/LocationMap";
 import { Item } from "@/Item";
+import { FOLLOWERS_MAP } from "@/Follower";
 
 Vue.use(Vuex);
 
@@ -112,7 +113,7 @@ export default new Vuex.Store({
 
       if (state.user.exp >= USER_LEVELS[state.user.level - 1]) {
         // Cleaner than doing hella vue.sets.
-        state.user = {
+        const updatedUser: User = {
           ...state.user,
           level: state.user.level + 1,
           exp: 0,
@@ -120,6 +121,14 @@ export default new Vuex.Store({
           levelUp: true,
           lastGoldReward: Math.round((state.user.level + 2) ** 2.75)
         };
+
+        for (const follower of updatedUser.followers) {
+          for (const effect of FOLLOWERS_MAP[follower.name].effects) {
+            updatedUser[effect.statName] += effect.amount;
+          }
+        }
+
+        state.user = updatedUser;
       }
     },
     addGold(state, gold: number) {

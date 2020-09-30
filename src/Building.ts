@@ -8,7 +8,6 @@ export class Building {
   cost: number;
   size: number;
   additionalMaxFollowers: number;
-  avatar: Avatar;
 
   constructor(
     name: string,
@@ -26,12 +25,6 @@ export class Building {
     this.cost = cost;
     this.size = size;
     this.additionalMaxFollowers = additionalMaxFollowers;
-    this.avatar = {
-      name: name,
-      image: imagePath,
-      x: Math.round(Math.random() * 100),
-      size: size + Math.random() * 0.1 * size
-    };
   }
 
   purchaseEffect(store: any) {
@@ -39,7 +32,12 @@ export class Building {
 
     store.commit("addGold", -this.cost);
     store.commit("addMaxFollowers", this.additionalMaxFollowers);
-    store.commit("addBuilding", this.avatar);
+    store.commit("addBuilding", {
+      name: this.name,
+      imagePath: this.imagePath,
+      x: Math.round(Math.round(Math.random() * 100)),
+      size: Math.round(this.size + Math.random() * this.size * 0.1)
+    });
   }
 }
 
