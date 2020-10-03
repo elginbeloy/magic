@@ -6,15 +6,32 @@ import { Spell } from "@/Spell";
 import { LocationMap } from "@/LocationMap";
 import { Item } from "@/Item";
 import { FOLLOWERS_MAP } from "@/Follower";
+import { Chest } from "@/Chest";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     user: { ...BASE_USER },
-    monster: null
+    monster: null,
+    chest: null
   },
   mutations: {
+    setChest(state: any, chest: Chest | null) {
+      state.chest = chest;
+    },
+    pickChest(state: any) {
+      const items = state.user.items.concat(state.chest.rewards);
+      state.user = {
+        ...state.user,
+        items,
+        lastRewardItems: state.chest.rewards,
+        lastGoldReward: state.chest.goldReward,
+        lastExpReward: state.chest.expReward
+      };
+      console.log(state.user.items);
+      state.chest = null;
+    },
     // Monster mutations
     // ==============================================================
     setMonster(state: any, monster: Monster | null) {

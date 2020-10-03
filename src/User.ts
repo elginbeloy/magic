@@ -71,6 +71,7 @@ export const USER_STAT_DISPLAY_NAME_MAP: { [key in USER_STAT]: string } = {
 };
 
 export const USER_LEVELS = [
+  5,
   10,
   25,
   50,

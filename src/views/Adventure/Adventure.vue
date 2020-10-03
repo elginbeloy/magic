@@ -38,6 +38,7 @@
         }
       ]"
     ></alert-container>
+    <ChestContainer v-else-if="chest" />
     <div class="enemy-container" v-else-if="monster">
       <a
         class="info"
@@ -136,22 +137,26 @@ import { Component, Vue } from "vue-property-decorator";
 import { User } from "@/User";
 import { Spell, InfoPopup } from "@/Spell";
 import { Monster, getNextMonster } from "@/Monster.ts";
+import { Chest, getNextChest } from "@/Chest.ts";
+import ChestContainer from "./components/ChestContainer.vue";
 import LevelIndicator from "@/components/LevelIndicator.vue";
 import NavBar from "@/components/NavBar.vue";
 import AlertContainer from "./components/AlertContainer.vue";
 import { mapState } from "vuex";
 
 @Component({
-  computed: mapState(["user", "monster"]),
+  computed: mapState(["user", "chest", "monster"]),
   components: {
     LevelIndicator,
     NavBar,
-    AlertContainer
+    AlertContainer,
+    ChestContainer
   }
 })
 export default class Adventure extends Vue {
   user!: User;
   monster!: Monster | null;
+  chest!: Chest | null;
   infos: InfoPopup[] = [];
   ouch = false;
   attackInterval: number | undefined = undefined;
@@ -165,9 +170,10 @@ export default class Adventure extends Vue {
       !this.user.levelUp &&
       !this.user.dead &&
       !this.monster &&
+      !this.chest &&
       !this.user.lastExpReward
     ) {
-      this.getMonster();
+      this.getNext();
     }
   }
 
@@ -178,7 +184,7 @@ export default class Adventure extends Vue {
       this.$store.commit("confirmLevelUp");
     }
 
-    this.getMonster();
+    this.getNext();
   }
 
   castSpellKey(event: KeyboardEvent) {
@@ -189,26 +195,32 @@ export default class Adventure extends Vue {
     }
   }
 
-  getMonster() {
-    if (this.monster === null) {
-      const monster = getNextMonster(
-        Math.round(Math.random() * (this.user.level - 1)) + 1,
-        this.$store,
-        this.user.map,
-        this.addInfoPopups,
-        this.addOuch
-      );
-
-      // Reset all spells to unloaded.
-      this.$store.commit("setMonster", monster);
-      for (const spellKey of Object.keys(this.user.equippedSpells)) {
-        this.$store.commit("addReloadingSpell", spellKey);
-        this.$store.commit(
-          "addReloadRemovalTimeout",
-          setTimeout(() => {
-            this.$store.commit("removeReloadingSpell", spellKey);
-          }, this.user.equippedSpells[spellKey].reloadTimeSeconds * 1000)
+  getNext() {
+    if (this.monster === null && this.chest === null) {
+      const roll = Math.random();
+      if (roll > 0.9) {
+        const chest = getNextChest(this.user.level);
+        this.$store.commit("setChest", chest);
+      } else {
+        const monster = getNextMonster(
+          Math.round(Math.random() * (this.user.level - 1)) + 1,
+          this.$store,
+          this.user.map,
+          this.addInfoPopups,
+          this.addOuch
         );
+
+        // Reset all spells to unloaded.
+        this.$store.commit("setMonster", monster);
+        for (const spellKey of Object.keys(this.user.equippedSpells)) {
+          this.$store.commit("addReloadingSpell", spellKey);
+          this.$store.commit(
+            "addReloadRemovalTimeout",
+            setTimeout(() => {
+              this.$store.commit("removeReloadingSpell", spellKey);
+            }, this.user.equippedSpells[spellKey].reloadTimeSeconds * 1000)
+          );
+        }
       }
     }
   }
