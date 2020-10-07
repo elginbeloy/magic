@@ -111,7 +111,7 @@ export default class AlertContainer extends Vue {
       if (this.pickingProgressSeconds >= this.chest.timeLengthSeconds) {
         this.completedPicking = true;
       }
-    }, 50);
+    }, 1000);
   }
 }
 </script>
