@@ -20,16 +20,23 @@ export default new Vuex.Store({
     setChest(state: any, chest: Chest | null) {
       state.chest = chest;
     },
-    pickChest(state: any) {
+    // TODO make this an action so exp can level up properly
+    // TODO nerf the probability for rewards and the default gold
+    // and exp reward
+    // TODO add minimum magic iq to spells and nerf them broadly,
+    // but also making more in total
+    pickChest(state: any, multiplier: number) {
       const items = state.user.items.concat(state.chest.rewards);
       state.user = {
         ...state.user,
         items,
-        lastRewardItems: state.chest.rewards,
-        lastGoldReward: state.chest.goldReward,
-        lastExpReward: state.chest.expReward
+        gold: state.user.gold + state.chest.goldReward * multiplier,
+        exp: state.user.exp + state.chest.expReward * multiplier,
+        lastGoldReward: state.chest.goldReward * multiplier,
+        lastExpReward: state.chest.expReward * multiplier,
+        lastRewardItems: state.chest.rewards
       };
-      console.log(state.user.items);
+
       state.chest = null;
     },
     // Monster mutations

@@ -1,55 +1,117 @@
 <template>
   <div class="chest-container">
     <a class="banner">{{ chest.name }}</a>
-    <img class="chest" :src="chest.imagePath" v-if="!picking" />
-    <iframe
-      v-else
-      class="chest-iframe"
-      src="https://www.youtube.com/embed/UB1O30fR-EE"
-      frameborder="0"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-    ></iframe>
-    <div class="picking-progress" v-if="picking">
+    <template v-if="picking">
+      <div class="task-selector" v-if="!selectedTaskType">
+        <div class="task-selector__option" @click="selectTaskType('generic')">
+          <img src="../../../assets/images/fight.png" />
+          Task
+        </div>
+        <div class="task-selector__option" @click="selectTaskType('coding')">
+          <img src="../../../assets/images/fight.png" />
+          Coding
+        </div>
+        <div class="task-selector__option" @click="selectTaskType('meta')">
+          <img src="../../../assets/images/fight.png" />
+          Meta
+        </div>
+      </div>
       <div
-        class="picking-progress__progress-bar"
-        :style="{
-          width: (pickingProgressSeconds / chest.timeLengthSeconds) * 100 + '%'
-        }"
+        class="task-container"
+        v-else-if="selectedTaskType == 'generic'"
       ></div>
-      <a class="picking-progress__text">
-        {{ pickingProgressSeconds }} / {{ chest.timeLengthSeconds }}
-      </a>
-    </div>
-    <div class="pick-button" @click="startPicking" v-if="!picking">
-      <img src="../../../assets/images/fight.png" /> Pick Lock
-    </div>
+      <div
+        class="editor-container"
+        v-else-if="selectedTaskType == 'coding' || selectedTaskType == 'meta'"
+      >
+        <AceEditor
+          v-model="content"
+          @init="editorInit"
+          lang="html"
+          width="100%"
+          height="100%"
+        ></AceEditor>
+      </div>
+
+      <div class="picking-progress">
+        <div
+          class="picking-progress__progress-bar"
+          :style="{
+            width:
+              ((pickingProgressSeconds % chest.timeLengthSeconds) /
+                chest.timeLengthSeconds) *
+                100 +
+              '%'
+          }"
+        ></div>
+        <a class="picking-progress__text">
+          {{ pickingProgressSeconds }} / {{ chest.timeLengthSeconds }}
+        </a>
+      </div>
+      <div class="pick-button" @click="finish" v-if="completedPicking">
+        <img src="../../../assets/images/fight.png" /> Finish Picking Lock
+      </div>
+    </template>
+    <template v-else>
+      <img class="chest" :src="chest.imagePath" />
+      <div class="pick-button" @click="startPicking">
+        <img src="../../../assets/images/fight.png" /> Pick Lock
+      </div>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
 import { Chest } from "@/Chest";
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { mapState } from "vuex";
+import AceEditor from "vue2-ace-editor";
+
+type TASK_TYPE = "generic" | "coding" | "meta";
 
 @Component({
-  computed: mapState(["user", "chest"])
+  computed: mapState(["user", "chest"]),
+  components: {
+    AceEditor
+  }
 })
 export default class AlertContainer extends Vue {
   chest!: Chest;
   picking = false;
+  completedPicking = false;
+  selectedTaskType: TASK_TYPE | null = null;
   pickingProgressSeconds = 0;
+  model = "";
+  updateInterval: number | null = null;
+
+  editorInit() {
+    require("brace/ext/language_tools"); //language extension prerequsite...
+    require("brace/mode/html");
+    require("brace/mode/javascript"); //language
+    require("brace/snippets/javascript"); //snippet
+  }
 
   startPicking() {
     this.picking = true;
-    const updateInterval = setInterval(() => {
+  }
+
+  finish() {
+    this.$store.commit(
+      "pickChest",
+      this.pickingProgressSeconds / this.chest.timeLengthSeconds
+    );
+    if (this.updateInterval) clearInterval(this.updateInterval);
+  }
+
+  selectTaskType(taskType: TASK_TYPE) {
+    this.selectedTaskType = taskType;
+    this.updateInterval = setInterval(() => {
       console.log(this.pickingProgressSeconds);
       this.pickingProgressSeconds += 1;
       if (this.pickingProgressSeconds >= this.chest.timeLengthSeconds) {
-        this.$store.commit("pickChest");
-        clearInterval(updateInterval);
+        this.completedPicking = true;
       }
-    }, 1000);
+    }, 50);
   }
 }
 </script>
@@ -59,7 +121,7 @@ export default class AlertContainer extends Vue {
 
 .chest-container {
   position: relative;
-  width: 500px;
+  width: 800px;
   color: #fff;
   text-transform: uppercase;
 
@@ -85,12 +147,6 @@ export default class AlertContainer extends Vue {
   position: relative;
   width: 300px;
   filter: drop-shadow(0 0 16px $primary-blue);
-}
-
-.chest-iframe {
-  position: relative;
-  width: 500px;
-  height: 300px;
 }
 
 .pick-button {
@@ -122,5 +178,47 @@ export default class AlertContainer extends Vue {
 
 .picking-progress {
   @include progress-bar();
+}
+
+.editor-container {
+  margin-bottom: 40px;
+  width: 100%;
+  height: 400px;
+}
+
+.task-selector {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__option {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 4px 1px $primary-blue;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 80%;
+      height: auto;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 16px 4px $primary-blue;
+    }
+  }
 }
 </style>

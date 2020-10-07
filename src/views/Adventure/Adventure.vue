@@ -198,7 +198,7 @@ export default class Adventure extends Vue {
   getNext() {
     if (this.monster === null && this.chest === null) {
       const roll = Math.random();
-      if (roll > 0.9) {
+      if (roll > 0.85) {
         const chest = getNextChest(this.user.level);
         this.$store.commit("setChest", chest);
       } else {
