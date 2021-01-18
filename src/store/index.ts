@@ -20,25 +20,6 @@ export default new Vuex.Store({
     setChest(state: any, chest: Chest | null) {
       state.chest = chest;
     },
-    // TODO make this an action so exp can level up properly
-    // TODO nerf the probability for rewards and the default gold
-    // and exp reward
-    // TODO add minimum magic iq to spells and nerf them broadly,
-    // but also making more in total
-    pickChest(state: any, multiplier: number) {
-      const items = state.user.items.concat(state.chest.rewards);
-      state.user = {
-        ...state.user,
-        items,
-        gold: state.user.gold + state.chest.goldReward * multiplier,
-        exp: state.user.exp + state.chest.expReward * multiplier,
-        lastGoldReward: state.chest.goldReward * multiplier,
-        lastExpReward: state.chest.expReward * multiplier,
-        lastRewardItems: state.chest.rewards
-      };
-
-      state.chest = null;
-    },
     // Monster mutations
     // ==============================================================
     setMonster(state: any, monster: Monster | null) {
@@ -266,6 +247,24 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    pickChest(context, rewardMultiplier: number) {
+      const goldReward = Math.round(
+        context.state.chest.goldReward * rewardMultiplier
+      );
+      const expReward = Math.round(
+        context.state.chest.expReward * rewardMultiplier
+      );
+
+      context.commit("setLastRewardItems", context.state.chest.rewards);
+      for (const item of context.state.chest.rewards) {
+        context.commit("addItem", item);
+      }
+      context.commit("addGold", goldReward);
+      context.commit("setLastGoldReward", goldReward);
+      context.commit("addExp", expReward);
+      context.commit("setLastExpReward", expReward);
+      context.commit("setChest", null);
+    },
     attackMonster(context, damage: number) {
       context.commit("damageMonster", damage);
 

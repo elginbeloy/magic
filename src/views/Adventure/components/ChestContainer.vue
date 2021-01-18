@@ -96,7 +96,7 @@ export default class AlertContainer extends Vue {
   }
 
   finish() {
-    this.$store.commit(
+    this.$store.dispatch(
       "pickChest",
       this.pickingProgressSeconds / this.chest.timeLengthSeconds
     );
@@ -111,7 +111,7 @@ export default class AlertContainer extends Vue {
       if (this.pickingProgressSeconds >= this.chest.timeLengthSeconds) {
         this.completedPicking = true;
       }
-    }, 1000);
+    }, 5);
   }
 }
 </script>

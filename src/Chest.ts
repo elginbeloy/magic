@@ -62,15 +62,10 @@ export const COMMON_CHEST = new ChestTypes(
   "Common Chest",
   require("@/assets/images/chests/common_chest.png"),
   [
-    { item: Item.BASIC_WIZARD_HAT, probability: 0.5 },
-    { item: Item.BASIC_STAFF, probability: 0.4 },
-    { item: Item.BASIC_WAND, probability: 0.35 },
-    { item: Item.APPRENTICE_WAND, probability: 0.3 },
-    { item: Item.NATURE_WAND, probability: 0.25 },
-    { item: Item.THE_OPAL_ROD, probability: 0.2 },
-    { item: Item.DARK_SPELL_BOOK, probability: 0.15 },
-    { item: Item.FIRE_EYE_STAFF, probability: 0.1 },
-    { item: Item.SPARK_WAND, probability: 0.05 }
+    { item: Item.BASIC_WIZARD_HAT, probability: 0.25 },
+    { item: Item.BASIC_STAFF, probability: 0.25 },
+    { item: Item.BASIC_WAND, probability: 0.25 },
+    { item: Item.APPRENTICE_WAND, probability: 0.25 }
   ],
   1,
   1,
@@ -82,15 +77,11 @@ export const UNCOMMON_CHEST = new ChestTypes(
   "Uncommon Chest",
   require("@/assets/images/chests/uncommon_chest.png"),
   [
-    { item: Item.BASIC_WIZARD_HAT, probability: 0.75 },
-    { item: Item.BASIC_STAFF, probability: 0.5 },
-    { item: Item.BASIC_WAND, probability: 0.45 },
-    { item: Item.APPRENTICE_WAND, probability: 0.3 },
+    { item: Item.APPRENTICE_WAND, probability: 0.25 },
     { item: Item.NATURE_WAND, probability: 0.25 },
-    { item: Item.THE_OPAL_ROD, probability: 0.15 },
-    { item: Item.DARK_SPELL_BOOK, probability: 0.1 },
-    { item: Item.FIRE_EYE_STAFF, probability: 0.1 },
-    { item: Item.SPARK_WAND, probability: 0.05 }
+    { item: Item.THE_OPAL_ROD, probability: 0.25 },
+    { item: Item.DARK_SPELL_BOOK, probability: 0.25 },
+    { item: Item.FIRE_EYE_STAFF, probability: 0.25 }
   ],
   2,
   1,
@@ -102,13 +93,6 @@ export const RARE_CHEST = new ChestTypes(
   "Rare Chest",
   require("@/assets/images/chests/rare_chest.png"),
   [
-    { item: Item.BASIC_WIZARD_HAT, probability: 0.75 },
-    { item: Item.BASIC_STAFF, probability: 0.75 },
-    { item: Item.BASIC_WAND, probability: 0.75 },
-    { item: Item.APPRENTICE_WAND, probability: 0.5 },
-    { item: Item.NATURE_WAND, probability: 0.5 },
-    { item: Item.THE_OPAL_ROD, probability: 0.35 },
-    { item: Item.DARK_SPELL_BOOK, probability: 0.25 },
     { item: Item.FIRE_EYE_STAFF, probability: 0.25 },
     { item: Item.SPARK_WAND, probability: 0.15 },
     { item: Item.APPRENTICE_WAND, probability: 0.1 },

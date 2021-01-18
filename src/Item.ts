@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export class Item {
   key: string;
   name: string;
@@ -5,6 +7,8 @@ export class Item {
   imagePath: string;
   sellValue: number;
   effects: { statName: string; amount: number }[];
+  generationProbability: number;
+  minimumLevelRequired: number;
 
   constructor(
     key: string,
@@ -12,7 +16,9 @@ export class Item {
     desc: string,
     imagePath: string,
     sellValue: number,
-    effects: { statName: string; amount: number }[]
+    effects: { statName: string; amount: number }[],
+    generationProbability: number,
+    minimumLevelRequired: number
   ) {
     this.key = key;
     this.name = name;
@@ -20,6 +26,8 @@ export class Item {
     this.imagePath = imagePath;
     this.sellValue = sellValue;
     this.effects = effects;
+    this.generationProbability = generationProbability;
+    this.minimumLevelRequired = minimumLevelRequired;
   }
 
   equip(store: any) {
@@ -44,7 +52,9 @@ export const UNDEAD_STONE = new Item(
   "You see the lives of all those lost, learn from them. +1 magicPrecision.",
   require("@/assets/images/items/undead_stone.png"),
   5,
-  [{ statName: "magicPrecision", amount: 1 }]
+  [{ statName: "magicPrecision", amount: 1 }],
+  1.0,
+  0
 );
 
 export const GOBLIN_STONE = new Item(
@@ -53,7 +63,9 @@ export const GOBLIN_STONE = new Item(
   "Like diamonds but for goblins. They treasure and collect these. +1 luck.",
   require("@/assets/images/items/goblin_stone.png"),
   15,
-  [{ statName: "luck", amount: 1 }]
+  [{ statName: "luck", amount: 1 }],
+  1.0,
+  0
 );
 
 export const SOUL_STONE = new Item(
@@ -62,7 +74,9 @@ export const SOUL_STONE = new Item(
   "It glows with life. You see memories inside. +1 magicIQ.",
   require("@/assets/images/items/soul_stone.png"),
   10,
-  [{ statName: "magicIQ", amount: 1 }]
+  [{ statName: "magicIQ", amount: 1 }],
+  1.0,
+  0
 );
 
 export const MAGIC_STONE = new Item(
@@ -71,7 +85,9 @@ export const MAGIC_STONE = new Item(
   "You see thousands of Wizards casting spells in the stone. +1 magicStrength.",
   require("@/assets/images/items/magic_stone.png"),
   25,
-  [{ statName: "magicStrength", amount: 1 }]
+  [{ statName: "magicStrength", amount: 1 }],
+  1.0,
+  0
 );
 
 /* ============================= */
@@ -85,7 +101,9 @@ export const BASIC_WIZARD_HAT = new Item(
   [
     { statName: "magicPrecision", amount: 3 },
     { statName: "magicStrength", amount: 1 }
-  ]
+  ],
+  0.25,
+  1
 );
 
 export const BASIC_STAFF = new Item(
@@ -94,7 +112,9 @@ export const BASIC_STAFF = new Item(
   "Pretty basic, but hey, a staff is a staff. +5 total MP.",
   require("@/assets/images/items/basic_staff.png"),
   75,
-  [{ statName: "MP", amount: 5 }]
+  [{ statName: "MP", amount: 5 }],
+  0.25,
+  1
 );
 
 export const BASIC_WAND = new Item(
@@ -103,7 +123,9 @@ export const BASIC_WAND = new Item(
   "Oh, a wand! Sure, it's a basic one, but still. +5 magicStrength.",
   require("@/assets/images/items/basic_wand.png"),
   125,
-  [{ statName: "magicStrength", amount: 5 }]
+  [{ statName: "magicStrength", amount: 5 }],
+  0.25,
+  1
 );
 
 export const APPRENTICE_WAND = new Item(
@@ -115,7 +137,9 @@ export const APPRENTICE_WAND = new Item(
   [
     { statName: "MP", amount: 10 },
     { statName: "magicPrecision", amount: 10 }
-  ]
+  ],
+  0.24,
+  2
 );
 
 export const NATURE_WAND = new Item(
@@ -127,7 +151,9 @@ export const NATURE_WAND = new Item(
   [
     { statName: "HP", amount: 25 },
     { statName: "magicPrecision", amount: 25 }
-  ]
+  ],
+  0.23,
+  2
 );
 
 export const THE_OPAL_ROD = new Item(
@@ -140,7 +166,9 @@ export const THE_OPAL_ROD = new Item(
     { statName: "magicPrecision", amount: 9 },
     { statName: "magicIQ", amount: 6 },
     { statName: "magicStrength", amount: 3 }
-  ]
+  ],
+  0.2,
+  3
 );
 
 export const DARK_SPELL_BOOK = new Item(
@@ -153,7 +181,9 @@ export const DARK_SPELL_BOOK = new Item(
     { statName: "magicStrength", amount: 6 },
     { statName: "MP", amount: 6 },
     { statName: "magicIQ", amount: 6 }
-  ]
+  ],
+  0.2,
+  3
 );
 
 export const FIRE_EYE_STAFF = new Item(
@@ -166,7 +196,9 @@ export const FIRE_EYE_STAFF = new Item(
     { statName: "magicStrength", amount: 5 },
     { statName: "MP", amount: 5 },
     { statName: "HP", amount: 25 }
-  ]
+  ],
+  0.2,
+  3
 );
 
 export const SPARK_WAND = new Item(
@@ -175,7 +207,9 @@ export const SPARK_WAND = new Item(
   "You can see sparks when you do your magic. Cool. +15 luck.",
   require("@/assets/images/items/spark_wand.png"),
   300,
-  [{ statName: "luck", amount: 15 }]
+  [{ statName: "luck", amount: 15 }],
+  0.2,
+  4
 );
 
 export const STAFF_OF_HEALTH = new Item(
@@ -184,7 +218,9 @@ export const STAFF_OF_HEALTH = new Item(
   "You feel ... healthy. +100 HP.",
   require("@/assets/images/items/staff_of_health.png"),
   300,
-  [{ statName: "HP", amount: 100 }]
+  [{ statName: "HP", amount: 100 }],
+  0.2,
+  4
 );
 
 export const MANA_HAT = new Item(
@@ -193,7 +229,9 @@ export const MANA_HAT = new Item(
   "Put it on, get some mana. +25 MP",
   require("@/assets/images/items/mana_hat.png"),
   375,
-  [{ statName: "MP", amount: 25 }]
+  [{ statName: "MP", amount: 25 }],
+  0.2,
+  4
 );
 
 export const MAGIC_STAFF = new Item(
@@ -205,7 +243,9 @@ export const MAGIC_STAFF = new Item(
   [
     { statName: "magicStrength", amount: 15 },
     { statName: "MP", amount: 5 }
-  ]
+  ],
+  0.2,
+  4
 );
 
 export const MINOTAURS_MIGHT = new Item(
@@ -218,7 +258,9 @@ export const MINOTAURS_MIGHT = new Item(
     { statName: "HP", amount: 50 },
     { statName: "MP", amount: 10 },
     { statName: "magicStrength", amount: 10 }
-  ]
+  ],
+  0.25,
+  5
 );
 
 export const MAGIC_SCROLL = new Item(
@@ -230,7 +272,9 @@ export const MAGIC_SCROLL = new Item(
   [
     { statName: "magicStrength", amount: 25 },
     { statName: "magicIQ", amount: 25 }
-  ]
+  ],
+  0.2,
+  6
 );
 
 export const STAFF_OF_MANA = new Item(
@@ -239,7 +283,9 @@ export const STAFF_OF_MANA = new Item(
   "Mana flows thats all it knows. +50 MP.",
   require("@/assets/images/items/staff_of_mana.png"),
   750,
-  [{ statName: "MP", amount: 50 }]
+  [{ statName: "MP", amount: 50 }],
+  0.2,
+  6
 );
 
 export const WAND_OF_WEALTH = new Item(
@@ -248,7 +294,9 @@ export const WAND_OF_WEALTH = new Item(
   "You're going to be rich! +50 luck.",
   require("@/assets/images/items/wand_of_wealth.png"),
   1000,
-  [{ statName: "luck", amount: 50 }]
+  [{ statName: "luck", amount: 50 }],
+  0.18,
+  7
 );
 
 export const STAFF_OF_WEALTH = new Item(
@@ -257,7 +305,9 @@ export const STAFF_OF_WEALTH = new Item(
   "You're going to be super, super rich! +75 luck!",
   require("@/assets/images/items/staff_of_wealth.png"),
   1500,
-  [{ statName: "luck", amount: 75 }]
+  [{ statName: "luck", amount: 75 }],
+  0.15,
+  7
 );
 
 export const DARK_SPELL_BOOK_2 = new Item(
@@ -270,7 +320,9 @@ export const DARK_SPELL_BOOK_2 = new Item(
     { statName: "magicIQ", amount: 66 },
     { statName: "MP", amount: 66 },
     { statName: "magicPrecision", amount: 66 }
-  ]
+  ],
+  0.15,
+  8
 );
 
 export const WAND_OF_MAGIC = new Item(
@@ -280,8 +332,61 @@ export const WAND_OF_MAGIC = new Item(
   require("@/assets/images/items/wand_of_magic.png"),
   100000,
   [
-    { statName: "MP", amount: 66 },
-    { statName: "magicStrength", amount: 6 },
-    { statName: "magicPrecision", amount: 6 }
-  ]
+    { statName: "MP", amount: 666 },
+    { statName: "magicStrength", amount: 666 },
+    { statName: "magicPrecision", amount: 666 }
+  ],
+  0.05,
+  10
 );
+
+export const ITEMS = [
+  UNDEAD_STONE,
+  GOBLIN_STONE,
+  SOUL_STONE,
+  MAGIC_STONE,
+  BASIC_WIZARD_HAT,
+  BASIC_STAFF,
+  BASIC_WAND,
+  APPRENTICE_WAND,
+  NATURE_WAND,
+  THE_OPAL_ROD,
+  DARK_SPELL_BOOK,
+  FIRE_EYE_STAFF,
+  SPARK_WAND,
+  STAFF_OF_HEALTH,
+  MANA_HAT,
+  MAGIC_STAFF,
+  MINOTAURS_MIGHT,
+  MAGIC_SCROLL,
+  STAFF_OF_MANA,
+  WAND_OF_WEALTH,
+  STAFF_OF_HEALTH,
+  DARK_SPELL_BOOK_2,
+  WAND_OF_MAGIC
+];
+
+export const getItems = (
+  user: User,
+  multiplier: number,
+  minimumItemAmount = 0,
+  maximumItemAmount = Infinity
+): Item[] => {
+  const items = [];
+
+  do {
+    for (const item of ITEMS) {
+      if (items.length > maximumItemAmount) break;
+
+      const roll = Math.random() * (1 / ((user.luck * multiplier) / 5) ** 0.1);
+      if (
+        roll <= item.generationProbability &&
+        user.level >= item.minimumLevelRequired
+      ) {
+        items.push(item);
+      }
+    }
+  } while (items.length > minimumItemAmount);
+
+  return items;
+};
